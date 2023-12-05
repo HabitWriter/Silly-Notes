@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import morgan from 'morgan';
 import ViteExpress from 'vite-express';
-// import router from './routes/index.js';
+import router from './routes/index.js';
 
 const app = express();
 const port = '4090';
