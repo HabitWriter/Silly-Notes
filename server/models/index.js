@@ -28,11 +28,4 @@ Topic.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Subtopic,  { foreignKey: 'userId' });
 Subtopic.belongsTo(User, { foreignKey: 'userId' });
 
-
-// Movie.hasMany(Rating, { foreignKey: 'movieId' });
-// Rating.belongsTo(Movie, { foreignKey: 'movieId' });
-
-// User.hasMany(Rating, { foreignKey: 'userId' });
-// Rating.belongsTo(User, { foreignKey: 'userId' });
-
 export { Subtopic, Topic, Url, Project, User };

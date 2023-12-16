@@ -21,6 +21,7 @@ Subtopic.init(
         },
         timeAccessed: {
           type: DataTypes.DATE,
+          defaultValue: DataTypes.NOW,
         },
       codeExample: {
         type: DataTypes.TEXT,
