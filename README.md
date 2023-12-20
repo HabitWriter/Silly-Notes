@@ -19,12 +19,3 @@ Will update Code Example, Notes, and Links onChange.
 Possibly need a links data table. Or use something else.
 Going to need to figure out the user flow and see if this is something actually possible.
 Going to build out the model as if users are involved regardless. Just to futureproof.
-
-## Dev Journal
-
-### 12/5/2023
-Got things started with the file structure for the project. Feeling much more confident now on setting up the needed models tomorrow. Got things imported correctly too. Need to make sure to add the .js to the end of things so that way things work. 
-
-Tomorrow's task, set up all the models and relationships through sequelize.
-
-After that we can start on DB seeding.

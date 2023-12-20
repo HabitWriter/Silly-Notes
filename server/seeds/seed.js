@@ -1,6 +1,6 @@
 import lodash from 'lodash';
-import { Subtopic, Topic, Url, Project, User } from '../server/models/index.js';
-import { db } from '../server/config/db.js';
+import { Subtopic, Topic, Url, Project, User } from '../models/index.js';
+import { db } from '../config/db.js';
 
 import topicData from './data/topic.json' assert { type: 'json' };
 import subtopicData from './data/subtopic.json' assert { type: 'json' };
@@ -85,46 +85,62 @@ console.log(subtopicInDB);
 
 // Create Seed URLS
 
+const urlInDB = await Promise.all(
+    urlData.map((urlObj) => {
+        const { url } = urlObj;
+        const subtopicId = subtopicInDB[0].subtopicId
+
+        const newUrl = Url.create({
+            url : url,
+            subtopicId : subtopicId
+        })
+
+        return newUrl
+    })
+);
+
+console.log(urlInDB);
+
 // Create Seed Middle Table
 
-const moviesInDB = await Promise.all(
-  movieData.map((movie) => {
-    const releaseDate = new Date(Date.parse(movie.releaseDate));
-    const { title, overview, posterPath } = movie;
+// const moviesInDB = await Promise.all(
+//   movieData.map((movie) => {
+//     const releaseDate = new Date(Date.parse(movie.releaseDate));
+//     const { title, overview, posterPath } = movie;
 
-    const newMovie = Movie.create({
-      title: title,
-      overview: overview,
-      posterPath: posterPath,
-      releaseDate: releaseDate,
-    });
+//     const newMovie = Movie.create({
+//       title: title,
+//       overview: overview,
+//       posterPath: posterPath,
+//       releaseDate: releaseDate,
+//     });
 
-    return newMovie;
-  }),
-);
+//     return newMovie;
+//   }),
+// );
 
-console.log(moviesInDB);
+// console.log(moviesInDB);
 
 
-const ratingsInDB = await Promise.all(
-  usersInDB.flatMap((user) => {
-    // Get ten random movies
-    const randomMovies = lodash.sampleSize(moviesInDB, 10);
+// const ratingsInDB = await Promise.all(
+//   usersInDB.flatMap((user) => {
+//     // Get ten random movies
+//     const randomMovies = lodash.sampleSize(moviesInDB, 10);
 
-    // Create a rating for each movie
-    const movieRatings = randomMovies.map((movie) => {
-      return Rating.create({
-        score: lodash.random(1, 5),
-        userId: user.userId,
-        movieId: movie.movieId,
-      });
-    });
+//     // Create a rating for each movie
+//     const movieRatings = randomMovies.map((movie) => {
+//       return Rating.create({
+//         score: lodash.random(1, 5),
+//         userId: user.userId,
+//         movieId: movie.movieId,
+//       });
+//     });
 
-    return movieRatings;
-  }),
-);
+//     return movieRatings;
+//   }),
+// );
 
-console.log(ratingsInDB);
+// console.log(ratingsInDB);
 
 await db.close();
 console.log('Finished seeding database!');
