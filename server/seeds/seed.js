@@ -22,7 +22,7 @@ for (let i = 0; i < 1; i++) {
 
 const usersInDB = await Promise.all(usersToCreate);
 
-console.log(usersInDB);
+// console.log(usersInDB);
 
 // Create Seed Topics
 
@@ -40,7 +40,7 @@ const topicInDB = await Promise.all(
     })
 );
 
-console.log(topicInDB);
+// console.log(topicInDB);
 
 // Create Seed Projects
 
@@ -58,7 +58,9 @@ const projectInDB = await Promise.all(
     })
 );
 
-console.log(projectInDB);
+// console.log(projectInDB);
+
+console.log(topicInDB);
 
 // Create Seed Subtopics
 
@@ -67,6 +69,9 @@ const subtopicInDB = await Promise.all(
         const { title, timeAccessed, codeExample, notes } = subtopic;
         const userId = usersInDB[0].userId
         const topicId = topicInDB[0].topicId
+
+        
+        console.log(topicId);
 
         const newSubtopic = Subtopic.create({
             title : title,
@@ -81,7 +86,7 @@ const subtopicInDB = await Promise.all(
     })
 );
 
-console.log(subtopicInDB);
+// console.log(subtopicInDB);
 
 // Create Seed URLS
 
@@ -99,7 +104,7 @@ const urlInDB = await Promise.all(
     })
 );
 
-console.log(urlInDB);
+// console.log(urlInDB);
 
 // Create Seed Middle Table
 
