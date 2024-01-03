@@ -1,24 +1,8 @@
-import { atom, useAtom } from "jotai";
+export default function ArrowIcon({rotation}) {
 
-export const rotationAtom = atom(90)
-
-
-export default function ArrowIcon() {
-
-    const [rotation, setRotation] = useAtom(rotationAtom)
-
-
-    function rotateArrow() {
-        if (rotation === 0) {
-            setRotation(90)
-        } else {
-            setRotation(0)
-        }
-    }
-
-
+console.log(rotation);
     return (
-        <button title="Open/Close" className={"btn btn-square btn-ghost -rotate-90"}>
+        <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${rotation}`}>
             
             <svg
                 xmlns="http://www.w3.org/2000/svg"

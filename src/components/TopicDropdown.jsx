@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AddButton from './AddButton';
+import AddButton from './buttons/AddButton';
 
 export default function TopicDropdown() {
 
