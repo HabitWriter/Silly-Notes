@@ -1,3 +1,5 @@
+import AddButton from "./AddButton";
+import ArrowIcon from "./ArrowIcon";
 import TopicDropdown from "./TopicDropdown";
 
 export default function SubtopicTable() {
@@ -13,6 +15,18 @@ export default function SubtopicTable() {
                 <div className="w-16"></div>
                 <h2 className="card-title">Div</h2>
                 <button className=" w-16 btn btn-ghost">Open</button>
+            </div>
+
+        </div>
+      </div>
+      <div className="card w-70% bg-base-300 shadow-xl my-4">
+        
+        <div className="card-body items-center text-center">
+            {/* Flexbox containing title and open button */}
+            <div className="w-full flex justify-between">
+                <div className="w-16"></div>
+                <h2 className="card-title">Div</h2>
+                <ArrowIcon/>
             </div>
 
         </div>
@@ -37,17 +51,29 @@ export default function SubtopicTable() {
 
             {/* Code example and Notes Flex */}
 
-            <div className="w-full flex justify-around">
-                <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Code"></textarea>
-                <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Notes"></textarea>
+            <div className="w-full flex justify-around ">
+                
+                <div className="flex-col w-full mx-2">
+                <label htmlFor="code">Code</label>
+                <textarea name="code" className="w-full h-48 textarea textarea-bordered" ></textarea>
+                </div>
+                
+                <div className="flex-col w-full mx-2">
+                <label htmlFor="code">Notes</label>
+                <textarea name="code" className="w-full h-48 textarea textarea-bordered"></textarea>
+                </div>
 
             </div>
 
             <div className="divider"></div> 
 
-            <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Links"></textarea>
+            {/* Links Section */}
+            <h3>Links</h3>
+            <a className="link link-primary">google.com</a>
+            <a className="link link-primary">example.com</a>
+            <a className="link link-primary">test.com</a>
 
-
+            <AddButton/>
         </div>
       </div>
 
