@@ -11,7 +11,7 @@ function App() {
   return (
     <>
     <HeaderDrawer/>
-    
+
     {/* Nav header section */}
     
       {/* Topics Dropdown */}
@@ -41,8 +41,6 @@ function App() {
       {/* Notes Section */}
 
       {/* Links Section */}
-
-      {/*  */}
     </>
   )
 }

@@ -18,16 +18,42 @@ export default function SubtopicTable() {
         </div>
       </div>
 
-
-      {/* Subtopic Note Card closed */}
+      {/* Subtopic Note Card Open */}
 
       <div className="card w-70% bg-base-300 shadow-xl my-4">
+        
         <div className="card-body items-center text-center">
-          <h2 className="card-title">Div</h2>
-          <TopicDropdown />
-          <div className="card-actions"></div>
+            
+            {/* Flexbox containing title and open button */}
+            <div className="w-full flex justify-between">
+                <div className="w-16"></div>
+                <h2 className="card-title">Div</h2>
+                <button className=" w-16 btn btn-ghost">Close</button>
+            </div>
+
+            <div className="divider"></div> 
+
+            <TopicDropdown />
+
+            {/* Code example and Notes Flex */}
+
+            <div className="w-full flex justify-around">
+                <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Code"></textarea>
+                <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Notes"></textarea>
+
+            </div>
+
+            <div className="divider"></div> 
+
+            <textarea className="w-full h-48 mx-2 textarea textarea-bordered" placeholder="Links"></textarea>
+
+
         </div>
       </div>
+
+      {/* Subtopic Note Card Open, Editable */}
+
+
     </div>
   );
 }
