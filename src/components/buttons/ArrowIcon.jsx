@@ -1,8 +1,7 @@
-export default function ArrowIcon({rotation}) {
+export default function ArrowIcon({rotation, isOpen, setIsOpen}) {
 
-console.log(rotation);
     return (
-        <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${rotation}`}>
+        <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${rotation}`} onClick={() => setIsOpen(!isOpen)}>
             
             <svg
                 xmlns="http://www.w3.org/2000/svg"

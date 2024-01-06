@@ -1,48 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import TopicDropdown from './components/TopicDropdown'
-import HeaderDrawer from './components/HeaderDrawer'
+import { useAtomValue } from "jotai";
+import { subtopicArrayAtom } from "./atom";
+import "./App.css";
+import HeaderDrawer from "./components/HeaderDrawer";
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-    <HeaderDrawer/>
 
-    {/* Nav header section */}
-    
-      {/* Topics Dropdown */}
+    return (
+        <>
+            <HeaderDrawer />
 
-        {/* Topics Dropdown editable */}
+            {/* CREATED Nav header section */}
 
-      {/* Topics Search Bar */}
+            {/* CREATED Topics Dropdown */}
 
-    {/* SubtopicTable */}
+            {/* Topics Dropdown editable */}
 
-      {/* subtopic container closed */}
+            {/* Topics Search Bar */}
 
-      {/* subtopic container open */}
+            {/* SubtopicTable */}
 
-      {/* subtopic container open editable */}
+            {/* subtopic container closed */}
 
-      {/* subtopic header */}
+            {/* subtopic container open */}
 
-      {/* topic section */}
+            {/* subtopic container open editable */}
 
-        {/* topic dropdown */}
+            {/* subtopic header */}
 
-          {/* Topic Dropdown Button Container */}
-        
-      {/* Code Example Section */}
+            {/* topic section */}
 
-      {/* Notes Section */}
+            {/* topic dropdown */}
 
-      {/* Links Section */}
-    </>
-  )
+            {/* Topic Dropdown Button Container */}
+
+            {/* Code Example Section */}
+
+            {/* Notes Section */}
+
+            {/* Links Section */}
+        </>
+    );
 }
 
-export default App
+export default App;

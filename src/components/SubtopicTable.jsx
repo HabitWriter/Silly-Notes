@@ -1,11 +1,20 @@
-import AddButton from "./buttons/AddButton.jsx";
-import ArrowIcon from "./buttons/ArrowIcon.jsx";
+import { useAtomValue } from "jotai";
+import { subtopicArrayAtom } from "../atom.js";
+
 import SubtopicCard from "./SubtopicCard.jsx";
-import TopicDropdown from "./TopicDropdown.jsx";
+
 
 export default function SubtopicTable() {
+
+    let data = useAtomValue(subtopicArrayAtom)
+    console.log(data);
+//   const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayAtom)
+
+//   console.log(subtopicArray);
+
+
   return (
-    <div className="w-full p-10 lg:px-96">
+    <div className="w-full p-10 2xl:px-96">
         <SubtopicCard/>
     </div>
   );
