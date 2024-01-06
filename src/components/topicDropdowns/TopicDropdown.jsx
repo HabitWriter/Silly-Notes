@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import AddButton from './buttons/AddButton';
+import AddButton from '../buttons/AddButton';
 
 export default function TopicDropdown() {
 
 
   return (
-<div className="dropdown">
+<div className="dropdown dropdown-end">
   <div tabIndex="0" role="button" className="btn m-1">Topics</div>
   <div tabIndex="0" className="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-300">
     <div className="card-body flex items-center">

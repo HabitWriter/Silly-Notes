@@ -7,3 +7,5 @@ export const subtopicArrayAtom = atom(
     return res.data;
   }
 );
+
+export const isAddingNoteAtom = atom(false)

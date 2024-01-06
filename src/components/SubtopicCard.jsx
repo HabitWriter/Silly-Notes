@@ -1,10 +1,10 @@
 import AddButton from "./buttons/AddButton.jsx";
 import ArrowIcon from "./buttons/ArrowIcon.jsx";
-import TopicDropdown from "./TopicDropdown.jsx";
+import TopicDropdown from "./topicDropdowns/TopicDropdown.jsx";
 import { useState } from "react";
 
-export default function SubtopicCard() {
-    const [isOpen, setIsOpen] = useState(true);
+export default function SubtopicCard({subtopic}) {
+    const [isOpen, setIsOpen] = useState(false);
 
     if (isOpen) {
         return (
@@ -14,7 +14,7 @@ export default function SubtopicCard() {
                     {/* Flexbox containing title and open button */}
                     <div className="w-full flex justify-between">
                         <div className="w-12"></div>
-                        <h2 className="card-title">Div</h2>
+                        <h2 className="card-title">{subtopic.title}</h2>
                         <ArrowIcon rotation={"-rotate-0"} isOpen={isOpen} setIsOpen={setIsOpen} />
                     </div>
 
@@ -30,6 +30,7 @@ export default function SubtopicCard() {
                             <textarea
                                 name="code"
                                 className="w-full h-48 textarea textarea-bordered"
+                                defaultValue={subtopic.codeExample}
                             ></textarea>
                         </div>
 
@@ -38,6 +39,7 @@ export default function SubtopicCard() {
                             <textarea
                                 name="code"
                                 className="w-full h-48 textarea textarea-bordered"
+                                defaultValue={subtopic.notes}
                             ></textarea>
                         </div>
                     </div>
@@ -63,7 +65,7 @@ export default function SubtopicCard() {
                     {/* Flexbox containing title and open button */}
                     <div className="w-full flex justify-between">
                         <div className="w-12"></div>
-                        <h2 className="card-title">Div</h2>
+                        <h2 className="card-title">{subtopic.title}</h2>
                         <ArrowIcon rotation={"-rotate-90"} isOpen={isOpen} setIsOpen={setIsOpen} />
                     </div>
                 </div>
