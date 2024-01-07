@@ -8,4 +8,4 @@ export const subtopicArrayAtom = atom(
   }
 );
 
-export const isAddingNoteAtom = atom(false)
+export const isAddingNoteAtom = atom(false) 

@@ -1,6 +1,6 @@
 import AddButton from './buttons/AddButton'
 import SubtopicTable from './SubtopicTable'
-import TopicDropdown from './topicDropdowns/TopicDropdown'
+import HeaderTopicDropdown from './topicDropdowns/HeaderTopicDropdown'
 import { useSetAtom } from 'jotai'
 import { isAddingNoteAtom } from '../atom'
 
@@ -24,7 +24,7 @@ export default function HeaderDrawer() {
         </div> 
         <div className="flex-1 px-2 mx-2 text-xl">Silly Notes</div>
         <div className="flex">
-            <TopicDropdown/>
+            <HeaderTopicDropdown/>
             <input type="text" placeholder="Search Notes" className="input input-bordered w-full max-w-xs mx-4" />
             
             <AddButton clickAction={() => setIsAddingNote(true)}/>

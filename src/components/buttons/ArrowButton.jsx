@@ -1,4 +1,4 @@
-export default function ArrowIcon({rotation, isOpen, setIsOpen}) {
+export default function ArrowButton({rotation, isOpen, setIsOpen}) {
 
     return (
         <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${rotation}`} onClick={() => setIsOpen(!isOpen)}>
@@ -38,4 +38,4 @@ export default function ArrowIcon({rotation, isOpen, setIsOpen}) {
             </svg>
         </button>
     );
-}
+} 

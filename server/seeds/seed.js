@@ -68,15 +68,13 @@ const subtopicInDB = await Promise.all(
     subtopicData.map((subtopic) => {
         const { title, timeAccessed, codeExample, notes } = subtopic;
         const userId = usersInDB[0].userId
-        const topicId = topicInDB[0].topicId
-
         
-        console.log(topicId);
+        
+        
 
         const newSubtopic = Subtopic.create({
             title : title,
             userId : userId,
-            topidId : topicId,
             timeAccessed : timeAccessed,
             codeExample : codeExample,
             notes: notes 
@@ -85,6 +83,17 @@ const subtopicInDB = await Promise.all(
         return newSubtopic
     })
 );
+
+const subtopics = await Subtopic.findAll()
+const html = await Topic.findByPk(1)
+
+const addTopicId = async (subtopic) => {
+    await html.addSubtopic(subtopic);
+  };
+  
+  for (const subtopic of subtopics) {
+    await addTopicId(subtopic);
+  }
 
 // console.log(subtopicInDB);
 
