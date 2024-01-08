@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, } from "react";
 import AddButton from "../buttons/AddButton";
+import { useAtomValue } from "jotai";
+import { topicArrayAtom, subtopicArrayAtom } from "../../atom";
+
+
 
 export default function AddTopicDropdown() {
     const [selected, setSelected] = useState("Choose Topic");
     const [buttonColor, setButtonColor] = useState("btn btn-warning")
+    const topicArray = useAtomValue(topicArrayAtom);
+
+    const getTopicTitle = (e) => {
+      const chosenTopic = topicArray.find((topic) => topic.topicId == e.target.value)
+      return chosenTopic.title           
+      
+    }
+    
+    
+    
     return (
         <div className="dropdown dropdown-end">
             <div tabIndex="0" role="button" className={`${buttonColor} m-1`}>
@@ -18,15 +32,14 @@ export default function AddTopicDropdown() {
                     {/* The Select Box */}
                     <select
                         className="select select-ghost w-full max-w-xs"
-                        autoFocus
                         defaultValue={"Topics"}
-                        onChange={(e) => {setSelected(e.target.value); setButtonColor("btn");}}
+                        onChange={(e) => {setSelected(getTopicTitle(e)); setButtonColor("btn");}}
                     >
-                        {/* Get values from server in the future */}
-                        {/* <option disabled selected>Topics</option> */}
-                        <option>HTML</option>
-                        <option>JS</option>
-                        <option>CSS</option>
+                        {topicArray.map(function (topic) {
+                          return (
+                            <option key={topic.topicId} value={topic.topicId}>{topic.title}</option>
+                          )
+                        })}
                         
                     </select>
                     <AddButton />

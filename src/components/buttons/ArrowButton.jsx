@@ -38,4 +38,4 @@ export default function ArrowButton({rotation, isOpen, setIsOpen}) {
             </svg>
         </button>
     );
-} 
+}

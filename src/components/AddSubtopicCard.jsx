@@ -2,6 +2,7 @@ import AddTopicDropdown from "./topicDropdowns/AddTopicDropdown.jsx";
 import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import { useSetAtom } from "jotai";
 import { isAddingNoteAtom } from "../atom";
+import { Suspense } from "react";
 
 export default function AddSubtopicCard() {
     const setIsAddingNote = useSetAtom(isAddingNoteAtom);
@@ -23,7 +24,9 @@ export default function AddSubtopicCard() {
                     />
                     </form>
                     <div className="w-72">
-                        <AddTopicDropdown />
+                        <Suspense>
+                            <AddTopicDropdown />
+                        </Suspense>
                     </div>
 
                     <ConfirmButton clickAction={() => setIsAddingNote(false)} />
