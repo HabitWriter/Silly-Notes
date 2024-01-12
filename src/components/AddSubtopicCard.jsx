@@ -18,16 +18,6 @@ export default function AddSubtopicCard({ subtopicArray }) {
         }
       }
 
-    // async function addNewSubtopic(title, topicId) {
-    //     if (title && topicId)
-    //         await axios
-    //             .post("/new", { title: title, topicId: topicId })
-    //             .then((response) => {
-    //                 // console.log(response);
-    //                 return response;
-    //             });
-    // }
-
     return (
         <div className="card w-70% bg-base-300 shadow-xl my-4">
             <div className="card-body items-center text-center">
@@ -59,7 +49,6 @@ export default function AddSubtopicCard({ subtopicArray }) {
                                 newNoteTopic
                             );
 
-                            console.log(createdSubtopic.data);
                             setIsAddingNote(false);
                             setSubtopicArray([createdSubtopic.data,...subtopicArray]);
                         }}

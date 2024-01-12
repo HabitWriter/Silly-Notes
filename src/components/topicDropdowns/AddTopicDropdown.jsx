@@ -37,7 +37,7 @@ export default function AddTopicDropdown() {
                             setSelected(getTopicTitle(e));
                             setButtonColor("btn");
                             setNewNoteTopic(e.target.value);
-                            console.log(e.target.value);
+                            
                         }}
                     >
                       <option value="0" disabled>Choose Topic...</option>

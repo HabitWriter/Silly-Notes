@@ -9,10 +9,7 @@ import AddSubtopicCard from "./AddSubtopicCard.jsx";
 export default function SubtopicTable() {
     const subtopicArray = useAtomValue(subtopicArrayWriteableAtom);
     const isAddingNote = useAtomValue(isAddingNoteAtom)
-    // console.log(subtopicArray);
-    //   const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayAtom)
 
-    //   console.log(subtopicArray);
 
     return (
         <div className="w-full p-10 2xl:px-96">
