@@ -17,7 +17,7 @@ export default function SubtopicTable() {
     return (
         <div className="w-full p-10 2xl:px-96">
             
-            {isAddingNote && <AddSubtopicCard/>}
+            {isAddingNote && <AddSubtopicCard subtopicArray = {subtopicArray}/>}
 
             
 

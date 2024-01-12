@@ -17,4 +17,5 @@ export const topicArrayAtom = atom(
 );
 
 export const isAddingNoteAtom = atom(false)
-export const isAddingTopic = atom(false) 
+export const isAddingTopicAtom = atom(false) 
+export const newNoteTopicAtom = atom(0)
