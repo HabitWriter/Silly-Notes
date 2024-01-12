@@ -1,7 +1,7 @@
 import { useState, } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtomValue } from "jotai";
-import { topicArrayAtom, subtopicArrayAtom } from "../../atom";
+import { topicArrayAtom } from "../../atom";
 
 export default function HeaderTopicDropdown() {
   const [selected, setSelected] = useState("Filter Topics");

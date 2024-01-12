@@ -3,7 +3,6 @@ import AddButton from "../buttons/AddButton";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
     topicArrayAtom,
-    subtopicArrayAtom,
     newNoteTopicAtom,
 } from "../../atom";
 

@@ -1,7 +1,7 @@
 import AddTopicDropdown from "./topicDropdowns/AddTopicDropdown.jsx";
 import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import { useAtomValue, useSetAtom } from "jotai";
-import { isAddingNoteAtom, newNoteTopicAtom, subtopicArrayAtom } from "../atom";
+import { isAddingNoteAtom, newNoteTopicAtom, subtopicArrayWriteableAtom } from "../atom";
 import { useRef, Suspense } from "react";
 import axios from "axios";
 
@@ -9,18 +9,24 @@ export default function AddSubtopicCard({ subtopicArray }) {
     const setIsAddingNote = useSetAtom(isAddingNoteAtom);
     const newNoteTopic = useAtomValue(newNoteTopicAtom);
     const inputRef = useRef();
-    const setSubtopicArray = useSetAtom(subtopicArrayAtom);
+    const setSubtopicArray = useSetAtom(subtopicArrayWriteableAtom);
     
 
     async function addNewSubtopic(title, topicId) {
-        if (title && topicId)
-            await axios
-                .post("/new", { title: title, topicId: topicId })
-                .then((response) => {
-                    console.log(response);
-                    return response;
-                });
-    }
+        if (title && topicId) {
+          return axios.post("/new", { title: title, topicId: topicId });
+        }
+      }
+
+    // async function addNewSubtopic(title, topicId) {
+    //     if (title && topicId)
+    //         await axios
+    //             .post("/new", { title: title, topicId: topicId })
+    //             .then((response) => {
+    //                 // console.log(response);
+    //                 return response;
+    //             });
+    // }
 
     return (
         <div className="card w-70% bg-base-300 shadow-xl my-4">
@@ -46,14 +52,16 @@ export default function AddSubtopicCard({ subtopicArray }) {
                     </div>
 
                     <ConfirmButton
-                        clickAction={() => {
+                        clickAction={async () => {
                             
-                            const createdSubtopic = addNewSubtopic(
+                            const createdSubtopic = await addNewSubtopic(
                                 inputRef.current.value,
                                 newNoteTopic
                             );
+
+                            console.log(createdSubtopic.data);
                             setIsAddingNote(false);
-                            setSubtopicArray([createdSubtopic,...subtopicArray]);
+                            setSubtopicArray([createdSubtopic.data,...subtopicArray]);
                         }}
                     />
                 </div>

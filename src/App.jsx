@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { subtopicArrayAtom } from "./atom";
+
 import "./App.css";
 import HeaderDrawer from "./components/HeaderDrawer";
 

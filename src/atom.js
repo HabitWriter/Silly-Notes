@@ -1,13 +1,35 @@
 import { atom } from "jotai";
 import axios from "axios";
 
-export const subtopicArrayAtom = atom(
+// Subtopic Atoms
+const subtopicArrayAtom = atom(
   async get => {
     const res = await axios.get("http://localhost:4090/all");
     return res.data;
   }
 );
 
+export const subtopicArrayOrderedAtom = atom(async (get) => {
+  const subtopicArray = await get(subtopicArrayAtom);
+  return subtopicArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
+});
+
+const overwrittenSubtopicArrayAtom = atom(null)
+
+export const subtopicArrayWriteableAtom = atom(
+  (get) => get(overwrittenSubtopicArrayAtom) ?? get(subtopicArrayOrderedAtom),
+  (get, set, newValue) => {
+    const nextValue =
+      typeof newValue === 'function' ? newValue(get(subtopicArrayWriteableAtom)) : newValue
+    set(overwrittenSubtopicArrayAtom, nextValue)
+  },
+)
+
+
+// export const subtopicArrayOrderedAtom = atom((get) => get(subtopicArrayAtom))
+
+
+// Topic Atoms
 export const topicArrayAtom = atom(
   
   async get => {
@@ -15,6 +37,8 @@ export const topicArrayAtom = atom(
     return res.data;
   }
 );
+
+
 
 export const isAddingNoteAtom = atom(false)
 export const isAddingTopicAtom = atom(false) 
