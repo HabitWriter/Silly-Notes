@@ -1,8 +1,8 @@
-export default function AddButton({clickAction}) {
+export default function AddButton({clickAction, title}) {
   // TODO Need to change functioning, title, and links based on props
 
   return (
-    <button title="New note" className="btn btn-square btn-ghost" onClick={clickAction}>
+    <button title={title} className="btn btn-square btn-ghost" onClick={clickAction}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

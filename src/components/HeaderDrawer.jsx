@@ -29,7 +29,7 @@ export default function HeaderDrawer() {
             
             <input type="text" placeholder="Search Notes" className="input input-bordered w-full max-w-xs mx-4" />
             
-            <AddButton clickAction={() => setIsAddingNote(true)}/>
+            <AddButton clickAction={() => setIsAddingNote(true)} title={"New Note"}/>
         </div>
       </div>
 

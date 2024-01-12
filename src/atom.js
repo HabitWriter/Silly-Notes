@@ -9,7 +9,7 @@ const subtopicArrayAtom = atom(
   }
 );
 
-export const subtopicArrayOrderedAtom = atom(async (get) => {
+const subtopicArrayOrderedAtom = atom(async (get) => {
   const subtopicArray = await get(subtopicArrayAtom);
   return subtopicArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
 });
@@ -25,8 +25,7 @@ export const subtopicArrayWriteableAtom = atom(
   },
 )
 
-
-// export const subtopicArrayOrderedAtom = atom((get) => get(subtopicArrayAtom))
+export const subtopicArrayLengthAtom = atom((get) => get(subtopicArrayWriteableAtom).length)
 
 
 // Topic Atoms
@@ -39,7 +38,7 @@ export const topicArrayAtom = atom(
 );
 
 
-
+export const topicFilterAtom = atom(0)
 export const isAddingNoteAtom = atom(false)
 export const isAddingTopicAtom = atom(false) 
 export const newNoteTopicAtom = atom(0)

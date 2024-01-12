@@ -13,10 +13,12 @@ subtopicRouter.post('/new', async (req, res) => {
 
     const topic = await Topic.findOne({ where: {topicId : topicId}});
 
-    const subtopic = await Subtopic.create({ title : title}) 
+    let subtopic = await Subtopic.create({ title : title}) 
     await topic.addSubtopic(subtopic)
+    const subtopicId = subtopic.subtopicId
+    subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId}})
 
-
+    console.log(subtopic);
     res.json(subtopic)
 });
 

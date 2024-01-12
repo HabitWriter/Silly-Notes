@@ -52,7 +52,7 @@ export default function AddTopicDropdown() {
                             );
                         })}
                     </select>
-                    <AddButton />
+                    <AddButton clickAction={() =>{ return;}} title={"New Topic"}/>
                 </div>
             </div>
         </div>
