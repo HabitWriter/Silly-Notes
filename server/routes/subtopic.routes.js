@@ -13,13 +13,27 @@ subtopicRouter.post('/new', async (req, res) => {
 
     const topic = await Topic.findOne({ where: {topicId : topicId}});
 
-    let subtopic = await Subtopic.create({ title : title}) 
+    const subtopic = await Subtopic.create({ title : title}) 
     await topic.addSubtopic(subtopic)
-    const subtopicId = subtopic.subtopicId
-    subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId}})
+    subtopic.topicId = topic.topicId
+
 
     console.log(subtopic);
     res.json(subtopic)
+});
+
+subtopicRouter.post('/edit', async (req, res) => {
+  const {subtopicId, changedField, change} = req.body;
+
+  const subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId}})
+  subtopic[changedField] = change
+  console.log(changedField);
+  console.log(change);
+
+  await subtopic.save();
+
+  res.json({ message: 'Subtopic updated successfully' });
+
 });
 
 // subtopicRouter.get('/:movieId', async (req, res) => {

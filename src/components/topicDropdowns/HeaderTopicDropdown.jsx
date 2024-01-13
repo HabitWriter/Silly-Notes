@@ -30,19 +30,19 @@ export default function HeaderTopicDropdown() {
       // Otherwise keep it the same.
       if (subtopicArrayLength > subtopicArrayLengthRef.current) {
         subtopicArrayRef.current = await subtopicArray
-        console.log(subtopicArrayRef.current);
-        console.log("Changed Refs!");
+        // console.log(subtopicArrayRef.current);
+        // console.log("Changed Refs!");
         subtopicArrayLengthRef.current = subtopicArrayLength 
       }
       // If the current length is different than the previously
       // recorded newArrayLengthRef a note has been added and the array
       // ref needs to update.
       // Otherwise, keep it the same.
-      console.log("initial array length: " + subtopicArrayLength);
-      console.log("New Length: " + newArrayLengthRef.current);
+      // console.log("initial array length: " + subtopicArrayLength);
+      // console.log("New Length: " + newArrayLengthRef.current);
 
       if (subtopicArrayLength > newArrayLengthRef.current) {
-        console.log("Added while filtering");
+        // console.log("Added while filtering");
         const currentArray = await subtopicArray
         const noteSet = new Set(subtopicArrayRef.current)
         const newNoteArray =[]
