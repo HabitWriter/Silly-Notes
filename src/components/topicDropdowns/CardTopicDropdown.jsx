@@ -3,17 +3,26 @@ import AddButton from "../buttons/AddButton";
 import { useAtomValue } from "jotai";
 import { topicArrayAtom } from "../../atom"
 
-export default function CardTopicDropdown() {
-    const [selected, setSelected] = useState("Filter Topics");
+export default function CardTopicDropdown({topicId, subtopicChange}) {
+    
 
     const topicArray = useAtomValue(topicArrayAtom);
+
+    const getTopicTitleInitial = (topicId) => {
+        const chosenTopic = topicArray.find(
+            (topic) => topic.topicId == topicId
+        );
+        return chosenTopic.title;
+    };
+
+    const [selected, setSelected] = useState(getTopicTitleInitial(topicId));
 
     const getTopicTitle = (e) => {
         const chosenTopic = topicArray.find(
             (topic) => topic.topicId == e.target.value
         );
         return chosenTopic.title;
-    };
+    }; 
 
     return (
         <div className="dropdown dropdown-end">
@@ -28,9 +37,10 @@ export default function CardTopicDropdown() {
                     {/* The Select Box */}
                     <select
                         className="select select-ghost w-full max-w-xs"
-                        defaultValue={"Topics"}
+                        defaultValue={topicId}
                         onChange={(e) => {
                             setSelected(getTopicTitle(e));
+                            subtopicChange(e,"topicId")
                         }}
                     >
                         {topicArray.map(function (topic) {

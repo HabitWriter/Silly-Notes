@@ -33,7 +33,7 @@ export default function SubtopicCard({ subtopic }) {
 
                     <div className="divider"></div>
 
-                    <CardTopicDropdown />
+                    <CardTopicDropdown topicId = {subtopic.topicId} subtopicChange = {subtopicChange}/>
 
                     {/* Code example and Notes Flex */}
                     <div className="w-full flex justify-around ">
