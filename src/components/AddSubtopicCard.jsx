@@ -1,7 +1,7 @@
 import AddTopicDropdown from "./topicDropdowns/AddTopicDropdown.jsx";
 import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import { useAtomValue, useSetAtom } from "jotai";
-import { isAddingNoteAtom, newNoteTopicAtom, subtopicArrayWriteableAtom } from "../atom";
+import { isAddingNoteAtom, newNoteTopicAtom, subtopicFilteredWriteableAtom } from "../atom";
 import { useRef, Suspense } from "react";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ export default function AddSubtopicCard({ subtopicArray }) {
     const setIsAddingNote = useSetAtom(isAddingNoteAtom);
     const newNoteTopic = useAtomValue(newNoteTopicAtom);
     const inputRef = useRef();
-    const setSubtopicArray = useSetAtom(subtopicArrayWriteableAtom);
+    const setSubtopicArray = useSetAtom(subtopicFilteredWriteableAtom);
     
 
     async function addNewSubtopic(title, topicId) {

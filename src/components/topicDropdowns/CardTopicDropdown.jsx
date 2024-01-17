@@ -1,10 +1,11 @@
 import { useState } from "react";
 import AddButton from "../buttons/AddButton";
-import { useAtomValue } from "jotai";
-import { topicArrayAtom } from "../../atom"
+import { useAtom, useAtomValue } from "jotai";
+import { subtopicArrayWriteableAtom, topicArrayAtom } from "../../atom"
 
 export default function CardTopicDropdown({topicId, subtopicChange}) {
     
+    const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
 
     const topicArray = useAtomValue(topicArrayAtom);
 
@@ -22,7 +23,11 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
             (topic) => topic.topicId == e.target.value
         );
         return chosenTopic.title;
-    }; 
+    };
+    
+    const sendSubtopicChanges = () => {
+        return;
+    }
 
     return (
         <div className="dropdown dropdown-end">

@@ -12,8 +12,9 @@ export default function HeaderTopicDropdown() {
     const topicArray = useAtomValue(topicArrayAtom);
     const setFilterAtom = useSetAtom(topicFilterAtom)
     // Refs
-    const subtopicArrayRef = useRef(subtopicArray)
-    const subtopicArrayLengthRef = useRef(subtopicArray.length)
+    // const subtopicArrayRef = useRef(subtopicFiltered)
+    const subtopicArrayRef = useRef(subtopicFiltered)
+    const subtopicArrayLengthRef = useRef(subtopicFiltered.length)
     const newArrayLengthRef = useRef(0)
     
 
@@ -21,13 +22,16 @@ export default function HeaderTopicDropdown() {
       const topicId = parseInt(e.target.value);
       setFilterAtom(topicId)
       
-      const subtopicArrayLength = subtopicArray.length
+      const subtopicArrayLength = subtopicFiltered.length
       
       // If the array length is longer, 
       // a new note has been added, and the array ref needs to update. 
       // Otherwise keep it the same.
       if (subtopicArrayLength > subtopicArrayLengthRef.current) {
-        subtopicArrayRef.current = await subtopicArray
+        
+        setSubtopicArray(await subtopicFiltered)
+        
+        subtopicArrayRef.current = await subtopicFiltered
         subtopicArrayLengthRef.current = subtopicArrayLength 
       }
       // If the current length is larger than the previously
@@ -36,11 +40,13 @@ export default function HeaderTopicDropdown() {
       // Otherwise, keep it the same.
 
       if (subtopicArrayLength > newArrayLengthRef.current) {
-        const currentArray = await subtopicArray
+        const currentArray = await subtopicFiltered
+        // const noteSet = new Set(subtopicArrayRef.current)
         const noteSet = new Set(subtopicArrayRef.current)
         const newNoteArray =[]
         currentArray.forEach((note) => noteSet.add(note));
         noteSet.forEach((note) => newNoteArray.push(note));
+        setSubtopicArray(newNoteArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed)));
         subtopicArrayRef.current = newNoteArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
       }
 
@@ -55,12 +61,12 @@ export default function HeaderTopicDropdown() {
 
       if (topicId != 0) {
         const filteredSubtopics = subtopicArrayRef.current.filter(subtopic => subtopic.topicId === topicId);
-        setSubtopicArray(filteredSubtopics);
+        setSubtopicFiltered(filteredSubtopics);
         newArrayLengthRef.current = filteredSubtopics.length
 
       } else {
         const allSubtopics = subtopicArrayRef.current
-        setSubtopicArray(allSubtopics)
+        setSubtopicFiltered(allSubtopics)
         newArrayLengthRef.current = allSubtopics.length
 
       }

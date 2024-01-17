@@ -4,13 +4,36 @@ import { useAtomValue, useSetAtom } from "jotai";
 import {
     topicArrayAtom,
     newNoteTopicAtom,
+    topicFilterAtom
 } from "../../atom";
 
 export default function AddTopicDropdown() {
-    const [selected, setSelected] = useState("Choose Topic");
-    const [buttonColor, setButtonColor] = useState("btn btn-warning");
+    let filteredTopic = useAtomValue(topicFilterAtom)
+    let initialTopic = "Choose Topic"
+    let initialColor = "btn btn-warning"
+    if  (parseInt(filteredTopic) !== 0) {
+        console.log(filteredTopic);
+        initialTopic = parseInt(filteredTopic)
+        initialColor = "btn"
+    }
+    const [buttonColor, setButtonColor] = useState(initialColor);
     const topicArray = useAtomValue(topicArrayAtom);
     const setNewNoteTopic = useSetAtom(newNoteTopicAtom);
+    
+    const getTopicTitleInitial = (topicId) => {
+        if  (parseInt(filteredTopic) !== 0) {
+            const chosenTopic = topicArray.find(
+                (topic) => topic.topicId == topicId
+            );
+            setNewNoteTopic(parseInt(filteredTopic))
+            return chosenTopic.title;
+            
+        } else {
+            return topicId
+        }
+    };
+
+    const [selected, setSelected] = useState(getTopicTitleInitial(initialTopic));
 
     const getTopicTitle = (e) => {
         const chosenTopic = topicArray.find(
@@ -32,7 +55,7 @@ export default function AddTopicDropdown() {
                     {/* The Select Box */}
                     <select
                         className="select select-ghost w-full max-w-xs"
-                        defaultValue={0}
+                        defaultValue={parseInt(filteredTopic)}
                         onChange={(e) => {
                             setSelected(getTopicTitle(e));
                             setButtonColor("btn");
