@@ -1,5 +1,6 @@
 import AddTopicDropdown from "./topicDropdowns/AddTopicDropdown.jsx";
 import ConfirmButton from "./buttons/ConfirmButton.jsx";
+import XButton from "./buttons/XButton.jsx";
 import { useAtomValue, useSetAtom } from "jotai";
 import { isAddingNoteAtom, newNoteTopicAtom, subtopicFilteredWriteableAtom } from "../atom";
 import { useRef, Suspense } from "react";
@@ -24,6 +25,11 @@ export default function AddSubtopicCard({ subtopicArray }) {
                 {/* Flexbox containing the form inputs */}
 
                 <div className="w-full flex justify-between items-center">
+                    <XButton 
+                    clickAction={() => setIsAddingNote(false)}
+                    title={"exit adding note"}
+                    
+                    />
                     <label htmlFor="title">New Note:</label>
                     <form action="">
                         <input
