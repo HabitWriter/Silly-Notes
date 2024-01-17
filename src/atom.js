@@ -25,7 +25,16 @@ export const subtopicArrayWriteableAtom = atom(
   },
 )
 
-export const subtopicArrayLengthAtom = atom((get) => get(subtopicArrayWriteableAtom).length)
+const overwrittenSubtopicFilteredAtom = atom(null)
+
+export const subtopicFilteredWriteableAtom = atom(
+  (get) => get(overwrittenSubtopicFilteredAtom) ?? get(subtopicArrayOrderedAtom),
+  (get, set, newValue) => {
+    const nextValue =
+      typeof newValue === 'function' ? newValue(get(subtopicArrayWriteableAtom)) : newValue
+    set(overwrittenSubtopicFilteredAtom, nextValue)
+  },
+)
 
 
 // Topic Atoms

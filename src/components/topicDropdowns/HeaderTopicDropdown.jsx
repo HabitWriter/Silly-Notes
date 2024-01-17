@@ -1,13 +1,14 @@
 import { useState, useRef } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { topicArrayAtom, topicFilterAtom, subtopicArrayLengthAtom, subtopicArrayWriteableAtom} from "../../atom";
+import { topicArrayAtom, topicFilterAtom, subtopicArrayWriteableAtom, subtopicFilteredWriteableAtom} from "../../atom";
 
 export default function HeaderTopicDropdown() {
     const [selected, setSelected] = useState("Filter Topics");
     const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
+    const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
+
     // Atom Hooks
-    // const subtopicArrayLength = useAtomValue(subtopicArrayLengthAtom)
     const topicArray = useAtomValue(topicArrayAtom);
     const setFilterAtom = useSetAtom(topicFilterAtom)
     // Refs
@@ -22,27 +23,19 @@ export default function HeaderTopicDropdown() {
       
       const subtopicArrayLength = subtopicArray.length
       
-      
-      // console.log("Ref Max length: " + subtopicArrayLengthRef.current);
-      
       // If the array length is longer, 
       // a new note has been added, and the array ref needs to update. 
       // Otherwise keep it the same.
       if (subtopicArrayLength > subtopicArrayLengthRef.current) {
         subtopicArrayRef.current = await subtopicArray
-        // console.log(subtopicArrayRef.current);
-        // console.log("Changed Refs!");
         subtopicArrayLengthRef.current = subtopicArrayLength 
       }
-      // If the current length is different than the previously
+      // If the current length is larger than the previously
       // recorded newArrayLengthRef a note has been added and the array
       // ref needs to update.
       // Otherwise, keep it the same.
-      // console.log("initial array length: " + subtopicArrayLength);
-      // console.log("New Length: " + newArrayLengthRef.current);
 
       if (subtopicArrayLength > newArrayLengthRef.current) {
-        // console.log("Added while filtering");
         const currentArray = await subtopicArray
         const noteSet = new Set(subtopicArrayRef.current)
         const newNoteArray =[]
@@ -51,18 +44,25 @@ export default function HeaderTopicDropdown() {
         subtopicArrayRef.current = newNoteArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
       }
 
+      // If current length is smaller than the previously recorded
+      // newArrayLengthRef a note has had a filter change
+      // or has been deleted.
+      // If an item in the current array has had an item change its
+      // set topic, and there is a filter being applied,
+      // remove the item from view, 
+      // and update the subtopicArrayRef with the accurate information
 
 
       if (topicId != 0) {
         const filteredSubtopics = subtopicArrayRef.current.filter(subtopic => subtopic.topicId === topicId);
         setSubtopicArray(filteredSubtopics);
         newArrayLengthRef.current = filteredSubtopics.length
-        // console.log("New Length: " + newArrayLengthRef.current);
+
       } else {
         const allSubtopics = subtopicArrayRef.current
         setSubtopicArray(allSubtopics)
         newArrayLengthRef.current = allSubtopics.length
-        // console.log("New Length: " + newArrayLengthRef.current);
+
       }
 
     }

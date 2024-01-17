@@ -29,10 +29,11 @@ subtopicRouter.post('/edit', async (req, res) => {
   subtopic[changedField] = change
   console.log(changedField);
   console.log(change);
-
+  
   await subtopic.save();
+  console.log(subtopic);
 
-  res.json({ message: 'Subtopic updated successfully' });
+  res.json(subtopic);
 
 });
 
