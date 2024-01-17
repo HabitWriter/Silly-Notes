@@ -13,7 +13,7 @@ export default function HeaderTopicDropdown() {
     const setFilterAtom = useSetAtom(topicFilterAtom)
     // Refs
     // const subtopicArrayRef = useRef(subtopicFiltered)
-    const subtopicArrayRef = useRef(subtopicFiltered)
+    const subtopicArrayRef = useRef(subtopicArray)
     const subtopicArrayLengthRef = useRef(subtopicFiltered.length)
     const newArrayLengthRef = useRef(0)
     
@@ -22,6 +22,7 @@ export default function HeaderTopicDropdown() {
       const topicId = parseInt(e.target.value);
       setFilterAtom(topicId)
       
+      subtopicArrayRef.current = subtopicArray
       const subtopicArrayLength = subtopicFiltered.length
       
       // If the array length is longer, 
@@ -41,7 +42,7 @@ export default function HeaderTopicDropdown() {
 
       if (subtopicArrayLength > newArrayLengthRef.current) {
         const currentArray = await subtopicFiltered
-        // const noteSet = new Set(subtopicArrayRef.current)
+        
         const noteSet = new Set(subtopicArrayRef.current)
         const newNoteArray =[]
         currentArray.forEach((note) => noteSet.add(note));

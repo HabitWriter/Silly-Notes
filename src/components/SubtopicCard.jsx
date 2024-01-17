@@ -11,7 +11,10 @@ export default function SubtopicCard({ subtopic }) {
     const [notes, setNotes] = useState(subtopic.notes);
 
     async function subtopicChange(e,changedField) {
-        return axios.post('/edit', {subtopicId : subtopic.subtopicId, changedField : changedField, change : e.target.value})
+        let passedValue = e.target.value
+        
+        if (changedField === "topicId") passedValue = parseInt(passedValue)
+        return axios.post('/edit', {subtopicId : subtopic.subtopicId, changedField : changedField, change : passedValue})
     }
 
 

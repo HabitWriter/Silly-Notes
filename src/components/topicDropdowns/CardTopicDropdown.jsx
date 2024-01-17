@@ -1,14 +1,17 @@
 import { useState } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtom, useAtomValue } from "jotai";
-import { subtopicArrayWriteableAtom, topicArrayAtom } from "../../atom"
+import { subtopicArrayWriteableAtom, topicArrayAtom, subtopicFilteredWriteableAtom, topicFilterAtom } from "../../atom"
 
 export default function CardTopicDropdown({topicId, subtopicChange}) {
     
     const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
+    const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
 
     const topicArray = useAtomValue(topicArrayAtom);
-
+    const topicFilter = useAtomValue(topicFilterAtom);
+    
+    // Logic to get the topic from the parent component handing down the data.
     const getTopicTitleInitial = (topicId) => {
         const chosenTopic = topicArray.find(
             (topic) => topic.topicId == topicId
@@ -25,8 +28,20 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
         return chosenTopic.title;
     };
     
-    const sendSubtopicChanges = () => {
-        return;
+    const setFilteredArray = async (changedSubtopicPromise) => {
+        // Wait for the promise to resolve
+        const changedSubtopic = await changedSubtopicPromise;
+    
+        let newFullArray = subtopicArray.filter(subtopic => subtopic.subtopicId !== changedSubtopic.data.subtopicId);
+        newFullArray.push(changedSubtopic.data)
+        newFullArray = newFullArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed))
+        console.log(newFullArray);
+        setSubtopicArray(newFullArray);
+    
+        
+        const newFilteredArray = subtopicFiltered.filter(subtopic => subtopic.subtopicId !== changedSubtopic.data.subtopicId);
+        
+        setSubtopicFiltered(newFilteredArray);
     }
 
     return (
@@ -45,7 +60,10 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
                         defaultValue={topicId}
                         onChange={(e) => {
                             setSelected(getTopicTitle(e));
-                            subtopicChange(e,"topicId")
+                            let changedSubtopic = subtopicChange(e,"topicId")
+                            if (topicFilter !== 0) {
+                            setFilteredArray(changedSubtopic)
+                            }
                         }}
                     >
                         {topicArray.map(function (topic) {
