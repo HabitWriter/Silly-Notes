@@ -7,6 +7,8 @@ import { debounce } from "lodash";
 
 export default function SubtopicCard({ subtopic }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isAddingLink, setIsAddingLink] = useState(false);
+
     const [codeExample, setCodeExample] = useState(subtopic.codeExample);
     const [notes, setNotes] = useState(subtopic.notes);
 
@@ -17,7 +19,7 @@ export default function SubtopicCard({ subtopic }) {
         return axios.post('/edit', {subtopicId : subtopic.subtopicId, changedField : changedField, change : passedValue})
     }
 
-
+    console.log(subtopic.urls);
     // This is what renders if the card is open
     if (isOpen) {
         return (
@@ -71,9 +73,11 @@ export default function SubtopicCard({ subtopic }) {
 
                     {/* Links Section */}
                     <h3>Links</h3>
-                    <a className="link link-primary">google.com</a>
-                    <a className="link link-primary">example.com</a>
-                    <a className="link link-primary">test.com</a>
+                    
+                    {subtopic.urls.map(({url, text}) => {
+                        return <a className="link link-primary" href={url}>{text}</a>
+  
+                    })}
 
                     <AddButton />
                 </div>

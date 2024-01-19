@@ -10,3 +10,14 @@ After that we can start on DB seeding.
 ### 12/14/2023
 Clearly it's been far too long since I worked on this. Need to buckle down and get these models sorted out. Shouldn't be too tough. Let's get to it!
 
+### 1/16/2024
+Need to implement the following:
+- Deletion and editing of subtopics (use a hamburger menu)
+- Adding, Deletion, and editing of topics (use a hamburger menu)
+- Crud for Projects, Design render and pin action in project mode
+- CRUD for Links
+- Form control + toasts (or alerts)
+#### Stretch
+- Responsive Design.
+- User Login flow and Middleware
+- Polish README

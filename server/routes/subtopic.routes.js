@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { Subtopic, Topic } from '../models/index.js';
+import { Subtopic, Topic, Url } from '../models/index.js';
 
 const subtopicRouter = Router();
 
 subtopicRouter.get('/all', async (req, res) => {
-  const allSubtopics = await Subtopic.findAll();
+  const allSubtopics = await Subtopic.findAll({ include: [Url] });
   res.json(allSubtopics);
 });
 

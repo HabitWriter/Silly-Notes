@@ -60,7 +60,7 @@ const projectInDB = await Promise.all(
 
 // console.log(projectInDB);
 
-console.log(topicInDB);
+// console.log(topicInDB);
 
 // Create Seed Subtopics
 
@@ -98,22 +98,32 @@ const addTopicId = async (subtopic) => {
 // console.log(subtopicInDB);
 
 // Create Seed URLS
+let Div = await Subtopic.findByPk(1)
+
 
 const urlInDB = await Promise.all(
-    urlData.map((urlObj) => {
-        const { url } = urlObj;
+    urlData.map( async (urlObj) => {
+        const { url, text } = urlObj;
         const subtopicId = subtopicInDB[0].subtopicId
-
-        const newUrl = Url.create({
+        
+        const newUrl = await Url.create({
             url : url,
-            subtopicId : subtopicId
+            text : text,
+            subtopicId: 1,
         })
-
+        
+        await Div.addUrl(newUrl);
+        
+        newUrl.subtopicId = 1
+        
         return newUrl
     })
-);
-
-// console.log(urlInDB);
+    );
+    
+    Div = await Subtopic.findByPk(1, { include: [Url] }); // Fetch Div again, including associated Urls
+    console.log(Div.urls);
+    
+    // console.log(urlInDB);
 
 // Create Seed Middle Table
 
