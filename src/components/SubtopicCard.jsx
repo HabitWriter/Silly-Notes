@@ -1,11 +1,12 @@
 import AddButton from "./buttons/AddButton.jsx";
 import ArrowButton from "./buttons/ArrowButton.jsx";
 import OptionsButton from "./buttons/OptionsButton.jsx";
-import DeleteButton from "./buttons/DeleteButton.jsx";
 import CardTopicDropdown from "./topicDropdowns/CardTopicDropdown.jsx";
 import { useState } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
+import { useAtom } from "jotai";
+import { subtopicArrayWriteableAtom } from "../atom.js";
 
 export default function SubtopicCard({ subtopic }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,11 +16,24 @@ export default function SubtopicCard({ subtopic }) {
 
     const [codeExample, setCodeExample] = useState(subtopic.codeExample);
     const [notes, setNotes] = useState(subtopic.notes);
+    const [subtopicArray, setSubtopicArray] = useAtom(
+        subtopicArrayWriteableAtom
+    );
 
     async function subtopicChange(e, changedField) {
         let passedValue = e.target.value;
-
         if (changedField === "topicId") passedValue = parseInt(passedValue);
+        // Find the index of the current subtopic in the array
+        const subtopicIndex = subtopicArray.findIndex(
+            (searchedSubtopic) =>
+                searchedSubtopic.subtopicId === subtopic.subtopicId
+        );
+        // Make a copy of the subtopic array
+        const newSubtopicArray = [...subtopicArray];
+        // Update the changedField of the current subtopic in the copied array
+        newSubtopicArray[subtopicIndex][changedField] = passedValue;
+        // Update the state with the copied array
+        setSubtopicArray(newSubtopicArray);
         return axios.post("/edit", {
             subtopicId: subtopic.subtopicId,
             changedField: changedField,
@@ -27,9 +41,24 @@ export default function SubtopicCard({ subtopic }) {
         });
     }
 
-    function editBlurHandler(e) {
+    async function editBlurHandler(e) {
         setIsEditing(false);
         setSubtopicTitle(e.target.value);
+        // Find the index of the current subtopic in the array
+        const subtopicIndex = subtopicArray.findIndex(
+            (searchedSubtopic) =>
+                searchedSubtopic.subtopicId === subtopic.subtopicId
+        );
+        // Make a copy of the subtopic array
+        const newSubtopicArray = [...subtopicArray];
+        // Update the title of the current subtopic in the copied array
+        newSubtopicArray[subtopicIndex].title = e.target.value;
+        // Update the state with the copied array
+        setSubtopicArray(newSubtopicArray);
+        return await axios.patch("/edit-title", {
+            subtopicId: subtopic.subtopicId,
+            newTitle: e.target.value,
+        });
     }
 
     // This is what renders if the card is open
@@ -40,8 +69,8 @@ export default function SubtopicCard({ subtopic }) {
                     {/* Flexbox containing title and open button */}
                     <div className="w-full flex justify-between">
                         <div className="w-24"></div>
-                        
-                        {/* Ternary for is editing */}
+
+                        {/* Ternary for isEditing */}
                         {isEditing ? (
                             <input
                                 type="text"
@@ -60,7 +89,7 @@ export default function SubtopicCard({ subtopic }) {
                             <h2 className="card-title">{subtopicTitle}</h2>
                         )}
                         <div className="flex justify-between">
-                            <OptionsButton setIsEditing={setIsEditing}/>
+                            <OptionsButton setIsEditing={setIsEditing} />
                             <ArrowButton
                                 rotation={"-rotate-0"}
                                 isOpen={isOpen}
@@ -100,7 +129,7 @@ export default function SubtopicCard({ subtopic }) {
                                 className="w-full h-48 textarea textarea-bordered"
                                 defaultValue={notes}
                                 onChange={debounce((e) => {
-                                    subtopicChange(e, "codeExample");
+                                    subtopicChange(e, "notes");
                                     setNotes(e.target.value);
                                 }, 500)}
                             ></textarea>
@@ -138,6 +167,7 @@ export default function SubtopicCard({ subtopic }) {
                     {/* Flexbox containing title and open button */}
                     <div className="w-full flex justify-between">
                         <div className="w-24"></div>
+                        {/* Ternary for isEditing */}
                         {isEditing ? (
                             <input
                                 type="text"
@@ -157,7 +187,7 @@ export default function SubtopicCard({ subtopic }) {
                         )}
 
                         <div className="flex justify-between">
-                            <OptionsButton setIsEditing={setIsEditing}/>
+                            <OptionsButton setIsEditing={setIsEditing} />
                             <ArrowButton
                                 rotation={"-rotate-90"}
                                 isOpen={isOpen}

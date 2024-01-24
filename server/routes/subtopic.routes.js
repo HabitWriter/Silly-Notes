@@ -37,6 +37,22 @@ subtopicRouter.post('/edit', async (req, res) => {
 
 });
 
+subtopicRouter.patch('/edit-title', async (req, res) => {
+  const { subtopicId, newTitle } = req.body;
+
+  const subtopic = await Subtopic.findOne({ where: { subtopicId: subtopicId } });
+  
+  if (!subtopic) {
+    return res.status(404).json({ error: 'Subtopic not found' });
+  }
+
+  subtopic.title = newTitle;
+  
+  await subtopic.save();
+
+  res.json(subtopic);
+});
+
 // subtopicRouter.get('/:movieId', async (req, res) => {
 //   const { movieId } = req.params;
 //   const movie = await Movie.findByPk(movieId);
