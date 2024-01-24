@@ -19,7 +19,7 @@ export default function SubtopicCard({ subtopic }) {
         return axios.post('/edit', {subtopicId : subtopic.subtopicId, changedField : changedField, change : passedValue})
     }
 
-    console.log(subtopic.urls);
+
     // This is what renders if the card is open
     if (isOpen) {
         return (
@@ -41,8 +41,8 @@ export default function SubtopicCard({ subtopic }) {
                     <CardTopicDropdown topicId = {subtopic.topicId} subtopicChange = {subtopicChange}/>
 
                     {/* Code example and Notes Flex */}
-                    <div className="w-full flex justify-around ">
-                        <div className="flex-col w-full mx-2">
+                    <div className="w-full flex flex-col md:flex-row justify-around ">
+                        <div className="flex-col w-full md:mx-2">
                             <label htmlFor="code">Code</label>
                             <textarea
                                 name="code"
@@ -55,7 +55,7 @@ export default function SubtopicCard({ subtopic }) {
                             ></textarea>
                         </div>
 
-                        <div className="flex-col w-full mx-2">
+                        <div className="flex-col w-full md:mx-2">
                             <label htmlFor="code">Notes</label>
                             <textarea
                                 name="code"
