@@ -1,32 +1,7 @@
-import { useAtom } from "jotai";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
-import { subtopicArrayWriteableAtom, subtopicFilteredWriteableAtom } from "../../atom";
 
-export default function OptionsButton({ setIsEditing, subtopicId}) {
-  const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
-  const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
-
-    async function deleteHandler() {
-      console.log("Delete Handler called");
-  
-      // Filter out the subtopic with the matching subtopicIdToDelete from both atoms
-      let newSubtopicArray = await subtopicArray
-      let newSubtopicFiltered = await subtopicFiltered
-
-      console.log(subtopicIdToDelete);
-
-      newSubtopicArray = newSubtopicArray.filter(subtopic => subtopic.subtopicId !== subtopicId);
-      newSubtopicFiltered.filter(subtopic => subtopic.id !== subtopicId);
-      
-      console.log(newSubtopicArray);
-      console.log(newSubtopicFiltered);
-      // Update the atoms
-      setSubtopicArray(newSubtopicArray);
-      setSubtopicFiltered(newSubtopicFiltered);
-  
-      // Your delete logic here
-    }
+export default function OptionsButton({ setIsEditing, deleteHandler}) {
 
     return (
         <div className="dropdown dropdown-end">

@@ -53,8 +53,8 @@ subtopicRouter.patch('/edit-title', async (req, res) => {
   res.json(subtopic);
 });
 
-subtopicRouter.delete('/delete', async (req, res) => {
-  const { subtopicId } = req.body;
+subtopicRouter.delete('/delete/:subtopicId', async (req, res) => {
+  const { subtopicId } = req.params;
 
   const subtopic = await Subtopic.findOne({ where: { subtopicId: subtopicId } });
   

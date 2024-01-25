@@ -1,7 +1,11 @@
 export default function ArrowButton({rotation, isOpen, setIsOpen}) {
 
+    let newRotation = isOpen ? "rotate-0" : "-rotate-90";
+
+
+
     return (
-        <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${rotation}`} onClick={() => setIsOpen(!isOpen)}>
+        <button title="Open/Close" className={`w-12 h-12 btn btn-ghost ${newRotation}`} onClick={() => setIsOpen(!isOpen)}>
             
             <svg
                 xmlns="http://www.w3.org/2000/svg"
