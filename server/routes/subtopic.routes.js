@@ -53,6 +53,19 @@ subtopicRouter.patch('/edit-title', async (req, res) => {
   res.json(subtopic);
 });
 
+subtopicRouter.delete('/delete', async (req, res) => {
+  const { subtopicId } = req.body;
+
+  const subtopic = await Subtopic.findOne({ where: { subtopicId: subtopicId } });
+  
+  if (!subtopic) {
+    return res.status(404).json({ error: 'Subtopic not found' });
+  }
+
+  await subtopic.destroy();
+
+  res.json({ message: 'Subtopic deleted successfully' });
+});
 // subtopicRouter.get('/:movieId', async (req, res) => {
 //   const { movieId } = req.params;
 //   const movie = await Movie.findByPk(movieId);

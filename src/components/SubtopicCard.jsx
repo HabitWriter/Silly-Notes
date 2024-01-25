@@ -55,6 +55,7 @@ export default function SubtopicCard({ subtopic }) {
         newSubtopicArray[subtopicIndex].title = e.target.value;
         // Update the state with the copied array
         setSubtopicArray(newSubtopicArray);
+        console.log(subtopic.subtopicId);
         return await axios.patch("/edit-title", {
             subtopicId: subtopic.subtopicId,
             newTitle: e.target.value,
@@ -89,7 +90,10 @@ export default function SubtopicCard({ subtopic }) {
                             <h2 className="card-title">{subtopicTitle}</h2>
                         )}
                         <div className="flex justify-between">
-                            <OptionsButton setIsEditing={setIsEditing} />
+                            <OptionsButton
+                                setIsEditing={setIsEditing}
+                                subtopicId={subtopic.subtopicId}
+                            />
                             <ArrowButton
                                 rotation={"-rotate-0"}
                                 isOpen={isOpen}
@@ -187,7 +191,10 @@ export default function SubtopicCard({ subtopic }) {
                         )}
 
                         <div className="flex justify-between">
-                            <OptionsButton setIsEditing={setIsEditing} />
+                            <OptionsButton
+                                setIsEditing={setIsEditing}
+                                subtopicId={subtopic.subtopicId}
+                            />
                             <ArrowButton
                                 rotation={"-rotate-90"}
                                 isOpen={isOpen}

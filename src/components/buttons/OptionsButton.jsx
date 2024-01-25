@@ -1,12 +1,41 @@
+import { useAtom } from "jotai";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
+import { subtopicArrayWriteableAtom, subtopicFilteredWriteableAtom } from "../../atom";
 
-export default function OptionsButton({ clickAction, title, setIsEditing}) {
-    // TODO Need to change functioning, title, and links based on props
+export default function OptionsButton({ setIsEditing, subtopicId}) {
+  const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
+  const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
+
+    async function deleteHandler() {
+      console.log("Delete Handler called");
+  
+      // Filter out the subtopic with the matching subtopicIdToDelete from both atoms
+      let newSubtopicArray = await subtopicArray
+      let newSubtopicFiltered = await subtopicFiltered
+
+      console.log(subtopicIdToDelete);
+
+      newSubtopicArray = newSubtopicArray.filter(subtopic => subtopic.subtopicId !== subtopicId);
+      newSubtopicFiltered.filter(subtopic => subtopic.id !== subtopicId);
+      
+      console.log(newSubtopicArray);
+      console.log(newSubtopicFiltered);
+      // Update the atoms
+      setSubtopicArray(newSubtopicArray);
+      setSubtopicFiltered(newSubtopicFiltered);
+  
+      // Your delete logic here
+    }
 
     return (
         <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" title="Options" className="btn btn-ghost ">
+            <div
+                tabIndex={0}
+                role="button"
+                title="Options"
+                className="btn btn-ghost "
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -68,8 +97,14 @@ export default function OptionsButton({ clickAction, title, setIsEditing}) {
                 className="dropdown-content z-[1] card card-compact w-36 p-2 shadow bg-base-300"
             >
                 <div className="card-body flex flex-row items-center">
-                    <EditButton clickAction={() => setIsEditing(true)} title={"Edit Note"}/>
-                    <DeleteButton title={"Delete Note"}/>
+                    <EditButton
+                        clickAction={() => setIsEditing(true)}
+                        title={"Edit Note"}
+                    />
+                    <DeleteButton
+                        clickAction={deleteHandler}
+                        title={"Delete Note"}
+                    />
                 </div>
             </div>
         </div>
