@@ -1,17 +1,22 @@
 import AddButton from "./buttons/AddButton.jsx";
 import ArrowButton from "./buttons/ArrowButton.jsx";
 import OptionsButton from "./buttons/OptionsButton.jsx";
+import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import CardTopicDropdown from "./topicDropdowns/CardTopicDropdown.jsx";
 import { useState } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 import { useAtom } from "jotai";
-import { subtopicArrayWriteableAtom, subtopicFilteredWriteableAtom } from "../atom.js";
+import {
+    subtopicArrayWriteableAtom,
+    subtopicFilteredWriteableAtom,
+} from "../atom.js";
+import LinkSection from "./LinkSection.jsx";
 
 export default function SubtopicCard({ subtopic }) {
     const [isOpen, setIsOpen] = useState(false);
     const [subtopicTitle, setSubtopicTitle] = useState(subtopic.title);
-    const [isAddingLink, setIsAddingLink] = useState(false);
+    const [isAddingLink, setIsAddingLink] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
 
     const [codeExample, setCodeExample] = useState(subtopic.codeExample);
@@ -19,11 +24,19 @@ export default function SubtopicCard({ subtopic }) {
     const [subtopicArray, setSubtopicArray] = useAtom(
         subtopicArrayWriteableAtom
     );
-    const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
+    const [subtopicFiltered, setSubtopicFiltered] = useAtom(
+        subtopicFilteredWriteableAtom
+    );
 
-    async function subtopicChange(e, changedField) {
+    async function subtopicChange(
+        e,
+        changedField,
+        urlField = null,
+        urlId = null
+    ) {
         let passedValue = e.target.value;
         if (changedField === "topicId") passedValue = parseInt(passedValue);
+
         // Find the index of the current subtopic in the array
         const subtopicIndex = subtopicArray.findIndex(
             (searchedSubtopic) =>
@@ -32,14 +45,34 @@ export default function SubtopicCard({ subtopic }) {
         // Make a copy of the subtopic array
         const newSubtopicArray = [...subtopicArray];
         // Update the changedField of the current subtopic in the copied array
-        newSubtopicArray[subtopicIndex][changedField] = passedValue;
-        // Update the state with the copied array
-        setSubtopicArray(newSubtopicArray);
-        return axios.post("/edit", {
-            subtopicId: subtopic.subtopicId,
-            changedField: changedField,
-            change: passedValue,
-        });
+        if (urlField && urlId) {
+            // Find the index of the URL with the matching urlId
+            const id = parseInt(urlId)
+            const urlIndex = newSubtopicArray[subtopicIndex][
+                changedField
+            ].findIndex((url) => url.urlId === id);
+            // if (urlIndex !== -1) {
+            //     // Update the URL field
+                newSubtopicArray[subtopicIndex][changedField][urlIndex][urlField] = passedValue;
+                setSubtopicArray(newSubtopicArray);
+            // }
+            return axios.post("/api/url/edit", {
+                subtopicId: subtopic.subtopicId,
+                changedField: changedField,
+                urlId : urlId,
+                urlField: urlField,
+                change: passedValue,
+            });
+        } else {
+            newSubtopicArray[subtopicIndex][changedField] = passedValue;
+            // Update the state with the copied array
+            setSubtopicArray(newSubtopicArray);
+            return axios.post("/edit", {
+                subtopicId: subtopic.subtopicId,
+                changedField: changedField,
+                change: passedValue,
+            });
+        }
     }
 
     async function editBlurHandler(e) {
@@ -58,7 +91,7 @@ export default function SubtopicCard({ subtopic }) {
         newSubtopicArray[subtopicIndex].title = e.target.value;
         // Update the state with the copied array
         setSubtopicArray(newSubtopicArray);
-        
+
         return await axios.patch("/edit-title", {
             subtopicId: subtopic.subtopicId,
             newTitle: e.target.value,
@@ -67,23 +100,28 @@ export default function SubtopicCard({ subtopic }) {
 
     async function deleteHandler() {
         console.log("Delete Handler called");
-        
+
         if (confirm(`Are you sure you want to delete ${subtopic.title}`)) {
-        // Filter out the subtopic with the matching subtopicId from both atoms
-        let newSubtopicArray = subtopicArray
-        let newSubtopicFiltered = subtopicFiltered
-  
-        console.log(subtopic.subtopicId);
-  
-        newSubtopicArray = newSubtopicArray.filter(allSubtopic => allSubtopic.subtopicId !== subtopic.subtopicId);
-        newSubtopicFiltered = newSubtopicFiltered.filter(allSubtopic => allSubtopic.subtopicId !== subtopic.subtopicId);
-        
-        // Update the atoms
-        setSubtopicArray(newSubtopicArray);
-        setSubtopicFiltered(newSubtopicFiltered);
-    
-        return await axios.delete(`/delete/${subtopic.subtopicId}`)
-      }}
+            // Filter out the subtopic with the matching subtopicId from both atoms
+            let newSubtopicArray = subtopicArray;
+            let newSubtopicFiltered = subtopicFiltered;
+
+            console.log(subtopic.subtopicId);
+
+            newSubtopicArray = newSubtopicArray.filter(
+                (allSubtopic) => allSubtopic.subtopicId !== subtopic.subtopicId
+            );
+            newSubtopicFiltered = newSubtopicFiltered.filter(
+                (allSubtopic) => allSubtopic.subtopicId !== subtopic.subtopicId
+            );
+
+            // Update the atoms
+            setSubtopicArray(newSubtopicArray);
+            setSubtopicFiltered(newSubtopicFiltered);
+
+            return await axios.delete(`/delete/${subtopic.subtopicId}`);
+        }
+    }
 
     return (
         <div className="card w-70% bg-base-300 shadow-xl my-4">
@@ -91,7 +129,7 @@ export default function SubtopicCard({ subtopic }) {
                 {/* Flexbox containing title and open button */}
                 <div className="w-full flex justify-between">
                     <div className="w-24"></div>
-    
+
                     {/* Ternary for isEditing */}
                     {isEditing ? (
                         <input
@@ -118,25 +156,25 @@ export default function SubtopicCard({ subtopic }) {
                         />
                         <ArrowButton
                             rotation={() => {
-                                if (isOpen) return "-rotate-90"
-                                else return "-rotate-0"
+                                if (isOpen) return "-rotate-90";
+                                else return "-rotate-0";
                             }}
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
                         />
                     </div>
                 </div>
-                        
+
                 {/* This is what renders if the card is open */}
                 {isOpen && (
                     <>
                         <div className="divider"></div>
-    
+
                         <CardTopicDropdown
                             topicId={subtopic.topicId}
                             subtopicChange={subtopicChange}
                         />
-    
+
                         {/* Code example and Notes Flex */}
                         <div className="w-full flex flex-col md:flex-row justify-around ">
                             <div className="flex-col w-full md:mx-2">
@@ -152,7 +190,7 @@ export default function SubtopicCard({ subtopic }) {
                                     }, 500)}
                                 ></textarea>
                             </div>
-    
+
                             <div className="flex-col w-full md:mx-2">
                                 <label htmlFor="notes">Notes</label>
                                 <textarea
@@ -167,20 +205,84 @@ export default function SubtopicCard({ subtopic }) {
                                 ></textarea>
                             </div>
                         </div>
-    
+
                         <div className="divider"></div>
-    
+
                         {/* Links Section */}
                         <h3>Links</h3>
-    
+
                         {subtopic.urls.map(({ urlId, url, text }) => {
                             return (
-                                <a className="link link-primary" href={url} key={urlId}>
-                                    {text}
-                                </a>
+                                <div
+                                    key={urlId}
+                                    className="flex justify-center items-center"
+                                >
+                                    <LinkSection
+                                        urlId={urlId}
+                                        url={url}
+                                        text={text}
+                                        subtopicChange={subtopicChange}
+                                    />
+                                    {/* {isAddingLink ? (
+                                        <div className="flex justify-center items-center mx-2">
+                                            <label
+                                                htmlFor={`url-${urlId}`}
+                                                className="mx-2"
+                                            >
+                                                link:
+                                            </label>
+                                            <input
+                                                id={`url-${urlId}`}
+                                                type="text"
+                                                defaultValue={url}
+                                                placeholder="Type here"
+                                                className="input input-bordered w-full max-w-xs"
+                                                onBlur={(e) =>
+                                                    editBlurHandler(e)
+                                                }
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
+                                                        editBlurHandler(e);
+                                                    }
+                                                }}
+                                            />
+                                            <label
+                                                htmlFor={`url-text-${urlId}`}
+                                                className="mx-2"
+                                            >
+                                                text:
+                                            </label>
+                                            <input
+                                                id={`url-text-${urlId}`}
+                                                type="text"
+                                                defaultValue={text}
+                                                placeholder="Type here"
+                                                className="input input-bordered w-full max-w-xs"
+                                                onBlur={(e) =>
+                                                    editBlurHandler(e)
+                                                }
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
+                                                        editBlurHandler(e);
+                                                    }
+                                                }}
+                                            />
+                                            <ConfirmButton />
+                                        </div>
+                                    ) : (
+                                        <a
+                                            className="link link-primary"
+                                            href={url}
+                                        >
+                                            {text}
+                                        </a>
+                                    )} */}
+                                </div>
                             );
                         })}
-    
+
                         <AddButton />
                     </>
                 )}
