@@ -1,7 +1,6 @@
 import AddButton from "./buttons/AddButton.jsx";
 import ArrowButton from "./buttons/ArrowButton.jsx";
 import OptionsButton from "./buttons/OptionsButton.jsx";
-import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import CardTopicDropdown from "./topicDropdowns/CardTopicDropdown.jsx";
 import { useState } from "react";
 import axios from "axios";
@@ -51,11 +50,10 @@ export default function SubtopicCard({ subtopic }) {
             const urlIndex = newSubtopicArray[subtopicIndex][
                 changedField
             ].findIndex((url) => url.urlId === id);
-            // if (urlIndex !== -1) {
-            //     // Update the URL field
+            // Update the URL field
                 newSubtopicArray[subtopicIndex][changedField][urlIndex][urlField] = passedValue;
                 setSubtopicArray(newSubtopicArray);
-            // }
+            
             return axios.post("/api/url/edit", {
                 subtopicId: subtopic.subtopicId,
                 changedField: changedField,
@@ -133,6 +131,7 @@ export default function SubtopicCard({ subtopic }) {
                     {/* Ternary for isEditing */}
                     {isEditing ? (
                         <input
+                            autoFocus
                             type="text"
                             defaultValue={subtopicTitle}
                             placeholder="Type here"
@@ -223,62 +222,6 @@ export default function SubtopicCard({ subtopic }) {
                                         text={text}
                                         subtopicChange={subtopicChange}
                                     />
-                                    {/* {isAddingLink ? (
-                                        <div className="flex justify-center items-center mx-2">
-                                            <label
-                                                htmlFor={`url-${urlId}`}
-                                                className="mx-2"
-                                            >
-                                                link:
-                                            </label>
-                                            <input
-                                                id={`url-${urlId}`}
-                                                type="text"
-                                                defaultValue={url}
-                                                placeholder="Type here"
-                                                className="input input-bordered w-full max-w-xs"
-                                                onBlur={(e) =>
-                                                    editBlurHandler(e)
-                                                }
-                                                onKeyDown={(e) => {
-                                                    if (e.key === "Enter") {
-                                                        e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
-                                                        editBlurHandler(e);
-                                                    }
-                                                }}
-                                            />
-                                            <label
-                                                htmlFor={`url-text-${urlId}`}
-                                                className="mx-2"
-                                            >
-                                                text:
-                                            </label>
-                                            <input
-                                                id={`url-text-${urlId}`}
-                                                type="text"
-                                                defaultValue={text}
-                                                placeholder="Type here"
-                                                className="input input-bordered w-full max-w-xs"
-                                                onBlur={(e) =>
-                                                    editBlurHandler(e)
-                                                }
-                                                onKeyDown={(e) => {
-                                                    if (e.key === "Enter") {
-                                                        e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
-                                                        editBlurHandler(e);
-                                                    }
-                                                }}
-                                            />
-                                            <ConfirmButton />
-                                        </div>
-                                    ) : (
-                                        <a
-                                            className="link link-primary"
-                                            href={url}
-                                        >
-                                            {text}
-                                        </a>
-                                    )} */}
                                 </div>
                             );
                         })}

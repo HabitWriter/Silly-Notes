@@ -57,7 +57,7 @@ export default function LinkSection({ urlId, url, text, subtopicChange, setIsAdd
                     <ConfirmButton clickAction={() => setIsEditingLink(false)}/>
                 </div>
             ) : (
-                <a className="link link-primary" href={shownUrl}>
+                <a className="link link-primary mx-2" href={shownUrl}>
                     {shownText}
                 </a>
             )}

@@ -1,6 +1,5 @@
 import { useAtomValue } from "jotai";
 
-import "./App.css";
 import HeaderDrawer from "./components/HeaderDrawer";
 
 
