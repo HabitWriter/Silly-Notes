@@ -11,11 +11,12 @@ import {
     subtopicFilteredWriteableAtom,
 } from "../atom.js";
 import LinkSection from "./LinkSection.jsx";
+import AddLink from "./AddLink.jsx";
 
 export default function SubtopicCard({ subtopic }) {
     const [isOpen, setIsOpen] = useState(false);
     const [subtopicTitle, setSubtopicTitle] = useState(subtopic.title);
-    const [isAddingLink, setIsAddingLink] = useState(true);
+    const [isAddingLink, setIsAddingLink] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
     const [codeExample, setCodeExample] = useState(subtopic.codeExample);
@@ -71,6 +72,26 @@ export default function SubtopicCard({ subtopic }) {
                 change: passedValue,
             });
         }
+    }
+
+    async function addUrlToSubtopic(newUrl) {
+        // Find the index of the current subtopic in the array
+        
+        console.log(newUrl);
+
+        const subtopicIndex = subtopicArray.findIndex(
+            (searchedSubtopic) =>
+                searchedSubtopic.subtopicId === subtopic.subtopicId
+        );
+    
+        // Make a copy of the subtopic array
+        const newSubtopicArray = [...subtopicArray];
+    
+        // Add the new URL to the urls field of the current subtopic
+        newSubtopicArray[subtopicIndex].urls.push(newUrl);
+    
+        // Update the state with the copied array
+        setSubtopicArray(newSubtopicArray);
     }
 
     async function editBlurHandler(e) {
@@ -225,8 +246,8 @@ export default function SubtopicCard({ subtopic }) {
                                 </div>
                             );
                         })}
-
-                        <AddButton />
+                        {isAddingLink && <AddLink setIsAddingLink={setIsAddingLink} subtopicId = {subtopic.subtopicId} addUrlToSubtopic= {addUrlToSubtopic}/>}
+                        <AddButton clickAction={() => setIsAddingLink(true)} title={"Add new link"}/>
                     </>
                 )}
             </div>

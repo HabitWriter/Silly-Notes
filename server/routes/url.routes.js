@@ -9,17 +9,17 @@ urlRouter.get('/all', async (req, res) => {
 });
 
 urlRouter.post('/new', async (req, res) => {
-    const {title, topicId} = req.body;
+    const {url, text, subtopicId} = req.body;
 
-    const topic = await Topic.findOne({ where: {topicId : topicId}});
+    const subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId}});
 
-    const subtopic = await Subtopic.create({ title : title}) 
-    await topic.addSubtopic(subtopic)
-    subtopic.topicId = topic.topicId
+    const newUrl = await Url.create({ url : url, text : text}) 
+    await subtopic.addUrl(newUrl)
 
-
+    newUrl.subtopicId = subtopicId
     console.log(subtopic);
-    res.json(subtopic)
+    console.log(newUrl);
+    res.json(newUrl)
 });
 
 urlRouter.post('/edit', async (req, res) => {

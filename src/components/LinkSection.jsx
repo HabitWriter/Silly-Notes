@@ -4,7 +4,7 @@ import { useState } from "react";
 import { debounce } from "lodash";
 
 
-export default function LinkSection({ urlId, url, text, subtopicChange, setIsAddingLink ,setIsEditing, deleteHandler }) {
+export default function LinkSection({ urlId, url, text, subtopicChange}) {
     const [isEditingLink, setIsEditingLink] = useState(false)
     const [shownUrl, setShownUrl] = useState(url)
     const [shownText, setShownText] = useState(text)
