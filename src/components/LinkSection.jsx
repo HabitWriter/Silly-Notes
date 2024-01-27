@@ -4,13 +4,13 @@ import { useState } from "react";
 import { debounce } from "lodash";
 
 
-export default function LinkSection({ urlId, url, text, subtopicChange}) {
+export default function LinkSection({ urlId, url, text, subtopicChange, removeUrlFromSubtopic}) {
     const [isEditingLink, setIsEditingLink] = useState(false)
     const [shownUrl, setShownUrl] = useState(url)
     const [shownText, setShownText] = useState(text)
     
     return (
-        <div key={urlId} className="flex justify-center items-center">
+        <div key={urlId} className="flex justify-between items-center w-56 md:w-96">
             {isEditingLink ? (
                 <div className="flex justify-center items-center mx-2">
                     <label htmlFor={`url-${urlId}`} className="mx-2">
@@ -57,12 +57,12 @@ export default function LinkSection({ urlId, url, text, subtopicChange}) {
                     <ConfirmButton clickAction={() => setIsEditingLink(false)}/>
                 </div>
             ) : (
-                <a className="link link-primary mx-2" href={shownUrl}>
+                <a target="_blank" rel="noopener noreferrer nofollow" className="link link-primary mx-2" href={shownUrl}>
                     {shownText}
                 </a>
             )}
 
-            <OptionsButton setIsEditing={setIsEditingLink}/>
+            <OptionsButton setIsEditing={setIsEditingLink} deleteHandler={() => removeUrlFromSubtopic(urlId)}/>
         </div>
     );
 }

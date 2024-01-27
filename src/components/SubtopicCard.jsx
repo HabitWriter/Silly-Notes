@@ -94,6 +94,26 @@ export default function SubtopicCard({ subtopic }) {
         setSubtopicArray(newSubtopicArray);
     }
 
+    async function removeUrlFromSubtopic(urlIdToRemove) {
+        // Find the index of the current subtopic in the array
+        const subtopicIndex = subtopicArray.findIndex(
+            (searchedSubtopic) =>
+                searchedSubtopic.subtopicId === subtopic.subtopicId
+        );
+    
+        // Make a copy of the subtopic array
+        const newSubtopicArray = [...subtopicArray];
+    
+        // Remove the URL with the given urlId from the urls field of the current subtopic
+        newSubtopicArray[subtopicIndex].urls = newSubtopicArray[subtopicIndex].urls.filter(url => url.urlId !== urlIdToRemove);
+    
+        // Update the state with the copied array
+        setSubtopicArray(newSubtopicArray);
+    
+        // Send a request to the server to remove the URL
+        return axios.delete(`/api/url//delete/${urlIdToRemove}`);
+    }
+
     async function editBlurHandler(e) {
         setIsEditing(false);
         setSubtopicTitle(e.target.value);
@@ -242,6 +262,7 @@ export default function SubtopicCard({ subtopic }) {
                                         url={url}
                                         text={text}
                                         subtopicChange={subtopicChange}
+                                        removeUrlFromSubtopic={removeUrlFromSubtopic}
                                     />
                                 </div>
                             );

@@ -53,18 +53,18 @@ urlRouter.patch('/edit-title', async (req, res) => {
   res.json(subtopic);
 });
 
-urlRouter.delete('/delete/:subtopicId', async (req, res) => {
-  const { subtopicId } = req.params;
+urlRouter.delete('/delete/:urlId', async (req, res) => {
+  const { urlId } = req.params;
 
-  const subtopic = await Subtopic.findOne({ where: { subtopicId: subtopicId } });
+  const url = await Url.findOne({ where: { urlId: urlId } });
   
-  if (!subtopic) {
-    return res.status(404).json({ error: 'Subtopic not found' });
+  if (!url) {
+    return res.status(404).json({ error: 'Url not found' });
   }
 
-  await subtopic.destroy();
+  await url.destroy();
 
-  res.json({ message: 'Subtopic deleted successfully' });
+  res.json({ message: 'Url deleted successfully' });
 });
 // subtopicRouter.get('/:movieId', async (req, res) => {
 //   const { movieId } = req.params;

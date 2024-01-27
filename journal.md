@@ -13,7 +13,7 @@ Clearly it's been far too long since I worked on this. Need to buckle down and g
 ### 1/16/2024
 Need to implement the following:
 - COMPLETE - Deletion and editing of subtopics (use a hamburger menu) 
-- CRUD for Links
+- COMPLETE - CRUD for Links
 - Adding, Deletion, and editing of topics (use a hamburger menu)
 - Crud for Projects, Design render and pin action in project mode
 - Form control + toasts (or alerts)
