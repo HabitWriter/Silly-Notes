@@ -21,9 +21,11 @@ export default function AddLink({
     }
 
     return (
-        <div key={0} className="flex justify-center items-center">
-            <div className="flex justify-start items-center mx-2">
-                <div className="flex flex-wrap justify-center items-center mx-2">
+        <div key={0} className="flex items-center w-[300px] sm:w-[460px] md:w-[652px]">
+
+            <div className="flex items-center w-full justify-between">
+                <div className="flex justify-center items-center">
+                <div className="flex flex-wrap justify-center items-center">
                 <div className="flex items-center my-1">
                     <label htmlFor={`add-url`} className="mx-2">
                         link:
@@ -72,6 +74,7 @@ export default function AddLink({
                         addUrlToSubtopic(newUrl.data)
                         setIsAddingLink(false)
                     }} />
+                    </div>
                 <XButton
                             clickAction={() => setIsAddingLink(false)}
                             title={"Exit adding link"}

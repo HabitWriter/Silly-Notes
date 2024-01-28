@@ -17,11 +17,11 @@ export default function LinkSection({
     return (
         <div
             key={urlId}
-            className="flex justify-between items-center w-[300px] md:w-[500px]"
+            className="flex justify-between items-center w-[300px] sm:w-[460px] md:w-[652px]"
         >
             {isEditingLink ? (
-                <div className="flex justify-center items-center mx-2">
-                    <div className="flex flex-wrap justify-center items-center mx-2">
+                <div className="flex justify-between items-center">
+                    <div className="flex flex-wrap justify-center items-center">
                     <div className="flex items-center my-1">
                         <label htmlFor={`url-${urlId}`} className="mx-2">
                             link:
