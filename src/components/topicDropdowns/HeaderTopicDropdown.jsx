@@ -1,90 +1,115 @@
 import { useState, useRef } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { topicArrayAtom, topicFilterAtom, subtopicArrayWriteableAtom, subtopicFilteredWriteableAtom} from "../../atom";
+import {
+    topicArrayWriteableAtom,
+    topicFilterAtom,
+    subtopicArrayWriteableAtom,
+    subtopicFilteredWriteableAtom,
+} from "../../atom";
+import TopicOptionsButton from "../buttons/TopicOptionsButton";
+import axios from "axios";
 
 export default function HeaderTopicDropdown() {
     const [selected, setSelected] = useState("Filter Topics");
+    const [isAddingTopic, setisAddingTopic] = useState(false);
+
+    // Atoms
     const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
     const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
-
-    // Atom Hooks
-    const topicArray = useAtomValue(topicArrayAtom);
-    const setFilterAtom = useSetAtom(topicFilterAtom)
+    const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
+    const setFilterAtom = useSetAtom(topicFilterAtom);
     // Refs
     // const subtopicArrayRef = useRef(subtopicFiltered)
-    const subtopicArrayRef = useRef(subtopicArray)
-    const subtopicArrayLengthRef = useRef(subtopicFiltered.length)
-    const newArrayLengthRef = useRef(0)
-    
+    const subtopicArrayRef = useRef(subtopicArray);
+    const subtopicArrayLengthRef = useRef(subtopicFiltered.length);
+    const newArrayLengthRef = useRef(0);
 
     const setFilter = async (e) => {
-      const topicId = parseInt(e.target.value);
-      setFilterAtom(topicId)
-      
-      subtopicArrayRef.current = subtopicArray
-      const subtopicArrayLength = subtopicFiltered.length
-      
-      // If the array length is longer, 
-      // a new note has been added, and the array ref needs to update. 
-      // Otherwise keep it the same.
-      if (subtopicArrayLength > subtopicArrayLengthRef.current) {
-        
-        setSubtopicArray(await subtopicFiltered)
-        
-        subtopicArrayRef.current = await subtopicFiltered
-        subtopicArrayLengthRef.current = subtopicArrayLength 
-      }
-      // If the current length is larger than the previously
-      // recorded newArrayLengthRef a note has been added and the array
-      // ref needs to update.
-      // Otherwise, keep it the same.
+        const topicId = parseInt(e.target.value);
+        setFilterAtom(topicId);
 
-      if (subtopicArrayLength > newArrayLengthRef.current) {
-        const currentArray = await subtopicFiltered
-        
-        const noteSet = new Set(subtopicArrayRef.current)
-        const newNoteArray =[]
-        currentArray.forEach((note) => noteSet.add(note));
-        noteSet.forEach((note) => newNoteArray.push(note));
-        setSubtopicArray(newNoteArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed)));
-        subtopicArrayRef.current = newNoteArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
-      }
+        subtopicArrayRef.current = subtopicArray;
+        const subtopicArrayLength = subtopicFiltered.length;
 
-      // If current length is smaller than the previously recorded
-      // newArrayLengthRef a note has had a filter change
-      // or has been deleted.
-      // If an item in the current array has had an item change its
-      // set topic, and there is a filter being applied,
-      // remove the item from view, 
-      // and update the subtopicArrayRef with the accurate information
+        // If the array length is longer,
+        // a new note has been added, and the array ref needs to update.
+        // Otherwise keep it the same.
+        if (subtopicArrayLength > subtopicArrayLengthRef.current) {
+            setSubtopicArray(await subtopicFiltered);
 
+            subtopicArrayRef.current = await subtopicFiltered;
+            subtopicArrayLengthRef.current = subtopicArrayLength;
+        }
+        // If the current length is larger than the previously
+        // recorded newArrayLengthRef a note has been added and the array
+        // ref needs to update.
+        // Otherwise, keep it the same.
 
-      if (topicId != 0) {
-        const filteredSubtopics = subtopicArrayRef.current.filter(subtopic => subtopic.topicId === topicId);
-        setSubtopicFiltered(filteredSubtopics);
-        newArrayLengthRef.current = filteredSubtopics.length
+        if (subtopicArrayLength > newArrayLengthRef.current) {
+            const currentArray = await subtopicFiltered;
 
-      } else {
-        const allSubtopics = subtopicArrayRef.current
-        setSubtopicFiltered(allSubtopics)
-        newArrayLengthRef.current = allSubtopics.length
+            const noteSet = new Set(subtopicArrayRef.current);
+            const newNoteArray = [];
+            currentArray.forEach((note) => noteSet.add(note));
+            noteSet.forEach((note) => newNoteArray.push(note));
+            setSubtopicArray(
+                newNoteArray.sort(
+                    (a, b) =>
+                        new Date(b.timeAccessed) - new Date(a.timeAccessed)
+                )
+            );
+            subtopicArrayRef.current = newNoteArray.sort(
+                (a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed)
+            );
+        }
 
-      }
+        // If current length is smaller than the previously recorded
+        // newArrayLengthRef a note has had a filter change
+        // or has been deleted.
+        // If an item in the current array has had an item change its
+        // set topic, and there is a filter being applied,
+        // remove the item from view,
+        // and update the subtopicArrayRef with the accurate information
 
-    }
+        if (topicId != 0) {
+            const filteredSubtopics = subtopicArrayRef.current.filter(
+                (subtopic) => subtopic.topicId === topicId
+            );
+            setSubtopicFiltered(filteredSubtopics);
+            newArrayLengthRef.current = filteredSubtopics.length;
+        } else {
+            const allSubtopics = subtopicArrayRef.current;
+            setSubtopicFiltered(allSubtopics);
+            newArrayLengthRef.current = allSubtopics.length;
+        }
+    };
 
     const getTopicTitle = (e) => {
-      const topicId = parseInt(e.target.value);
-      if (topicId !== 0) {  
-        const chosenTopic = topicArray.find(
-            (topic) => topic.topicId === topicId);
-        return chosenTopic.title;
-      
-      } else {
-        return "Filter Topics"
-      }
+        const topicId = parseInt(e.target.value);
+        if (topicId !== 0) {
+            const chosenTopic = topicArray.find(
+                (topic) => topic.topicId === topicId
+            );
+            return chosenTopic.title;
+        } else {
+            return "Filter Topics";
+        }
     };
+
+    const newTopicHandler = async (e) => {
+      if (e.target.value) {
+        const topic = await axios.post("/api/topic/new", {title : e.target.value})
+        console.log(topic.data);
+        const newTopicArray = [...topicArray]
+        newTopicArray.push(topic.data)
+        setTopicArray(newTopicArray)
+      }
+
+      
+    }
+
+
 
     return (
         <div className="dropdown dropdown-end">
@@ -93,10 +118,9 @@ export default function HeaderTopicDropdown() {
             </div>
             <div
                 tabIndex="0"
-                className="dropdown-content z-[1] card card-compact w-64 p-2 shadow bg-base-300"
+                className="dropdown-content z-[1] card card-compact w-72 p-2 shadow bg-base-300"
             >
                 <div className="card-body flex items-center">
-                    
                     {/* The Select Box */}
                     <select
                         className="select select-ghost w-full max-w-xs"
@@ -105,8 +129,8 @@ export default function HeaderTopicDropdown() {
                             setSelected(getTopicTitle(e));
                             setFilter(e);
                         }}
-                    > 
-                      <option value="0">All</option>
+                    >
+                        <option value="0">All</option>
                         {topicArray.map(function (topic) {
                             return (
                                 <option
@@ -118,12 +142,40 @@ export default function HeaderTopicDropdown() {
                             );
                         })}
                     </select>
-                    <AddButton
-                        clickAction={() => {
-                            return;
-                        }}
-                        title={"New Topic"}
-                    />
+
+                    {/* Add a New Topic input */}
+
+                    {isAddingTopic && (
+                        <input
+                            type="text"
+                            autoFocus
+                            name="new Topic"
+                            placeholder="New Topic title"
+                            className="input input-bordered w-full max-w-xs"
+                            // ref={inputRef}
+                            onBlur={(e) => {
+                              newTopicHandler(e);
+                              setisAddingTopic(false);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
+                                    newTopicHandler(e);
+                                    setisAddingTopic(false);
+                                }
+                            }}
+                        />
+                    )}
+                    {/* Buttons Section */}
+                    <div className="flex items-center">
+                        <AddButton
+                            clickAction={() => {
+                                setisAddingTopic(true)
+                            }}
+                            title={"New Topic"}
+                        />
+                        <TopicOptionsButton />
+                    </div>
                 </div>
             </div>
         </div>

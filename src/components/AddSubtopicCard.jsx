@@ -37,6 +37,11 @@ export default function AddSubtopicCard({ subtopicArray }) {
                             placeholder="New note title"
                             className="input input-bordered w-full max-w-xs"
                             ref={inputRef}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault(); // Prevents the addition of a new line in the input when pressing 'Enter'
+                                    // Add new note here?
+                                }}}
                         />
                     </form>
                     <div className="w-72">

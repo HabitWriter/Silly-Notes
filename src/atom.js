@@ -46,6 +46,22 @@ export const topicArrayAtom = atom(
   }
 );
 
+// Overwritten topic array atom
+const overwrittenTopicArrayAtom = atom(null);
+
+// Writable topic array atom
+export const topicArrayWriteableAtom = atom(
+  // Getter
+  get => {
+    const overwrittenTopicArray = get(overwrittenTopicArrayAtom);
+    return overwrittenTopicArray !== null ? overwrittenTopicArray : get(topicArrayAtom);
+  },
+  // Setter
+  (get, set, newValue) => {
+    set(overwrittenTopicArrayAtom, typeof newValue === 'function' ? newValue(get(topicArrayAtom)) : newValue);
+  }
+);
+
 
 export const topicFilterAtom = atom(0)
 export const isAddingNoteAtom = atom(false)
