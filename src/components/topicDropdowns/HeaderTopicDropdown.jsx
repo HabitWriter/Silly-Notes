@@ -11,7 +11,6 @@ import TopicOptionsButton from "../buttons/TopicOptionsButton";
 import axios from "axios";
 import { debounce } from "lodash";
 import DeleteButton from "../buttons/DeleteButton";
-import TopicConfirmButton from "../buttons/TopicConfirmButton";
 
 export default function HeaderTopicDropdown() {
     const [selected, setSelected] = useState("Filter Topics");
