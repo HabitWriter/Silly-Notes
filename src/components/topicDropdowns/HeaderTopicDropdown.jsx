@@ -135,7 +135,7 @@ export default function HeaderTopicDropdown() {
 
     return (
         <div className="dropdown dropdown-end">
-            <div tabIndex="0" role="button" className={`btn w-40 m-1`}>
+            <div tabIndex="0" role="button" className={`btn w-40 my-1 mx-4`}>
                 {selected}
             </div>
             <div

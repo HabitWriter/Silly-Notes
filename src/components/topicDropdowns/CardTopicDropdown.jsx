@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtom, useAtomValue } from "jotai";
 import {
@@ -73,10 +73,10 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
         setSubtopicFiltered(newFilteredArray);
     };
 
-    const handleValueChange = (value) => {
+    const handleValueChange = async (value) => {
         console.log(value);
         setSelected(getTopicTitle(value));
-        let changedSubtopic = subtopicChange(parseInt(value), "topicId");
+        let changedSubtopic = await subtopicChange(parseInt(value), "topicId");
         if (topicFilter !== 0) {
             setFilteredArray(changedSubtopic);
         }
@@ -84,6 +84,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
 
     useEffect(() => {
         // Call the new function with selectedValue as argument
+        console.log("useEffect called");
         handleValueChange(selectedValue);
     }, [selectedValue]);
 

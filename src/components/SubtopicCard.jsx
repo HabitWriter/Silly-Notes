@@ -37,12 +37,14 @@ export default function SubtopicCard({ subtopic }) {
         let passedValue;
     // If e is a number, set passedValue to e
     if (typeof e === 'number') {
-        console.log("received a number");
         passedValue = e;
     } else {
         passedValue = e.target.value;
         if (changedField === "topicId") passedValue = parseInt(passedValue);
     }
+
+    // console.log("passed value: " + passedValue);
+    // console.log("changed field: " + changedField);
 
 
         // Find the index of the current subtopic in the array
@@ -71,6 +73,7 @@ export default function SubtopicCard({ subtopic }) {
                 change: passedValue,
             });
         } else {
+            console.log(newSubtopicArray);
             newSubtopicArray[subtopicIndex][changedField] = passedValue;
             // Update the state with the copied array
             setSubtopicArray(newSubtopicArray);
@@ -152,7 +155,7 @@ export default function SubtopicCard({ subtopic }) {
             let newSubtopicArray = subtopicArray;
             let newSubtopicFiltered = subtopicFiltered;
 
-            console.log(subtopic.subtopicId);
+            // console.log(subtopic.subtopicId);
 
             newSubtopicArray = newSubtopicArray.filter(
                 (allSubtopic) => allSubtopic.subtopicId !== subtopic.subtopicId

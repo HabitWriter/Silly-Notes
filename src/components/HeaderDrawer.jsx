@@ -26,10 +26,10 @@ export default function HeaderDrawer() {
         <div className="flex-1 px-2 mx-2 text-xl invisible md:visible">Silly Notes</div>
         <div className="flex justify-end">
             
+            <input type="text" placeholder="Search Notes" className="input input-bordered w-full max-w-xs invisible" />
+            
             <HeaderTopicDropdown/>
-            
-            <input type="text" placeholder="Search Notes" className="input input-bordered w-full max-w-xs mx-4 invisible" />
-            
+                        
             <AddButton clickAction={() => setIsAddingNote(true)} title={"New Note"}/>
         </div>
       </div>

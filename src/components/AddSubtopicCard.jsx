@@ -1,20 +1,23 @@
 import AddTopicDropdown from "./topicDropdowns/AddTopicDropdown.jsx";
 import ConfirmButton from "./buttons/ConfirmButton.jsx";
 import XButton from "./buttons/XButton.jsx";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
     isAddingNoteAtom,
     newNoteTopicAtom,
-    subtopicFilteredWriteableAtom,
+    subtopicArrayWriteableAtom,
+    subtopicFilteredWriteableAtom
 } from "../atom";
 import { useRef, Suspense } from "react";
 import axios from "axios";
 
-export default function AddSubtopicCard({ subtopicArray }) {
+export default function AddSubtopicCard({  }) {
     const setIsAddingNote = useSetAtom(isAddingNoteAtom);
     const newNoteTopic = useAtomValue(newNoteTopicAtom);
     const inputRef = useRef();
-    const setSubtopicArray = useSetAtom(subtopicFilteredWriteableAtom);
+    // const setSubtopicArray = useSetAtom(subtopicFilteredWriteableAtom);
+    const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom)
+    const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
 
     async function addNewSubtopic(title, topicId) {
         if (title && topicId) {
@@ -57,12 +60,22 @@ export default function AddSubtopicCard({ subtopicArray }) {
                                     inputRef.current.value,
                                     newNoteTopic
                                 );
+
                                 console.log(createdSubtopic.data);
                                 setIsAddingNote(false);
+                                
                                 setSubtopicArray([
                                     createdSubtopic.data,
                                     ...subtopicArray,
                                 ]);
+                                setSubtopicFiltered([
+                                    createdSubtopic.data,
+                                    ...subtopicArray,
+                                ]);
+                                // console.log([
+                                //     createdSubtopic.data,
+                                //     ...subtopicArray,
+                                // ])
                             }}
                         />
                         <XButton
