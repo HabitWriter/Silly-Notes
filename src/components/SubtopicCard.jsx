@@ -73,7 +73,6 @@ export default function SubtopicCard({ subtopic }) {
                 change: passedValue,
             });
         } else {
-            console.log(newSubtopicArray);
             newSubtopicArray[subtopicIndex][changedField] = passedValue;
             // Update the state with the copied array
             setSubtopicArray(newSubtopicArray);

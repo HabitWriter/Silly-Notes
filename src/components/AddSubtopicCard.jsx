@@ -6,7 +6,8 @@ import {
     isAddingNoteAtom,
     newNoteTopicAtom,
     subtopicArrayWriteableAtom,
-    subtopicFilteredWriteableAtom
+    subtopicFilteredWriteableAtom,
+    topicFilterAtom
 } from "../atom";
 import { useRef, Suspense } from "react";
 import axios from "axios";
@@ -18,6 +19,7 @@ export default function AddSubtopicCard({  }) {
     // const setSubtopicArray = useSetAtom(subtopicFilteredWriteableAtom);
     const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom)
     const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
+    const topicFilter = useAtomValue(topicFilterAtom)
 
     async function addNewSubtopic(title, topicId) {
         if (title && topicId) {
@@ -61,21 +63,19 @@ export default function AddSubtopicCard({  }) {
                                     newNoteTopic
                                 );
 
-                                console.log(createdSubtopic.data);
+                                // console.log(createdSubtopic.data);
                                 setIsAddingNote(false);
                                 
                                 setSubtopicArray([
                                     createdSubtopic.data,
                                     ...subtopicArray,
                                 ]);
+                                
+                                if (createdSubtopic.data.topicId == topicFilter) {
                                 setSubtopicFiltered([
                                     createdSubtopic.data,
-                                    ...subtopicArray,
-                                ]);
-                                // console.log([
-                                //     createdSubtopic.data,
-                                //     ...subtopicArray,
-                                // ])
+                                    ...subtopicFiltered,
+                                ])};
                             }}
                         />
                         <XButton

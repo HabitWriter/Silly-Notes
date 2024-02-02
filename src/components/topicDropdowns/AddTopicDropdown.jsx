@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtomValue, useSetAtom, useAtom } from "jotai";
 import {
@@ -17,32 +17,54 @@ export default function AddTopicDropdown() {
     let initialTopic = "Choose Topic";
     let initialColor = "btn btn-warning";
     if (parseInt(filteredTopic) !== 0) {
-        console.log(filteredTopic);
+        // console.log(filteredTopic);
         initialTopic = parseInt(filteredTopic);
         initialColor = "btn";
     }
-
-    // Selected function
-    const getTopicTitleInitial = (topicId) => {
-        if (parseInt(filteredTopic) !== 0) {
-            const chosenTopic = topicArray.find(
-                (topic) => topic.topicId == topicId
-            );
-            setNewNoteTopic(parseInt(filteredTopic));
-            return chosenTopic.title;
-        } else {
-            return topicId;
-        }
-    };
-
-    const [selected, setSelected] = useState(
-        getTopicTitleInitial(initialTopic)
-    );
     const [buttonColor, setButtonColor] = useState(initialColor);
     const setNewNoteTopic = useSetAtom(newNoteTopicAtom);
     const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
     const [isAddingTopic, setIsAddingTopic] = useState(false);
     const [isEditingTopic, setIsEditingTopic] = useState(false);
+
+    // Selected function
+
+    const getTopicTitleInitial = (topicId) => {
+        if (parseInt(filteredTopic) !== 0) {
+            const chosenTopic = topicArray.find(
+                (topic) => topic.topicId == topicId
+            );
+            return chosenTopic ? chosenTopic.title : topicId;
+        } else {
+            return topicId;
+        }
+    };
+    
+    const [selected, setSelected] = useState(
+        getTopicTitleInitial(initialTopic)
+    );
+    
+    useEffect(() => {
+        if (parseInt(filteredTopic) !== 0) {
+            setNewNoteTopic(parseInt(filteredTopic));
+        }
+    }, [filteredTopic]);
+
+    // const getTopicTitleInitial = (topicId) => {
+    //     if (parseInt(filteredTopic) !== 0) {
+    //         const chosenTopic = topicArray.find(
+    //             (topic) => topic.topicId == topicId
+    //         );
+    //         setNewNoteTopic(parseInt(filteredTopic));
+    //         return chosenTopic.title;
+    //     } else {
+    //         return topicId;
+    //     }
+    // };
+
+    // const [selected, setSelected] = useState(
+    //     getTopicTitleInitial(initialTopic)
+    // );
 
     const getTopicTitle = (e) => {
         const chosenTopic = topicArray.find(

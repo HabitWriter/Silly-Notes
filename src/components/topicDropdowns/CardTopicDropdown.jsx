@@ -74,7 +74,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
     };
 
     const handleValueChange = async (value) => {
-        console.log(value);
+        
         setSelected(getTopicTitle(value));
         let changedSubtopic = await subtopicChange(parseInt(value), "topicId");
         if (topicFilter !== 0) {
@@ -84,7 +84,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
 
     useEffect(() => {
         // Call the new function with selectedValue as argument
-        console.log("useEffect called");
+        
         handleValueChange(selectedValue);
     }, [selectedValue]);
 
