@@ -12,13 +12,13 @@
 
  ### The techy bits
 
- Silly Notes is built on the PERN stack. With helpful tools from lodash, jotai for global state, and sequelize as an ORM. This helped me get experience with various tools as well as get a much better grasp on state management, routing, and interacting with a database.
+ Silly Notes is built on the PERN stack. With helpful tools from Lodash, Jotai for global state, and sequelize as an ORM. This helped me get experience with various tools as well as get a much better grasp on state management, routing, and interacting with a database.
 
  ### Struggles
 
  I did learn a bit of the woes of global state as it became a bit tougher to track what components were making changes against my wishes.
 
- I also should have done a better job of compartmentalizing my components to avoid monstrous walls of code (e.g. SubtopicVard.jsx and HeaderTopicDropdown.jsx). I may fix this in the future, but that depends on the willingness of future me.
+ I also should have done a better job of compartmentalizing my components to avoid monstrous walls of code (e.g. SubtopicCard.jsx and HeaderTopicDropdown.jsx). I may fix this in the future, but that depends on the willingness of future me.
 
  ## How to Run Silly Notes
 
