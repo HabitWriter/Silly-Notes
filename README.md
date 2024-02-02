@@ -14,6 +14,8 @@
 
  Silly Notes is built on the PERN stack. With helpful tools from Lodash, Jotai for global state, and sequelize as an ORM. This helped me get experience with various tools as well as get a much better grasp on state management, routing, and interacting with a database.
 
+ I also used Tailwind and Daisy UI for design which was really awesome to build with. Gave me some experience with tailwind and UI libraries.
+
  ### Struggles
 
  I did learn a bit of the woes of global state as it became a bit tougher to track what components were making changes against my wishes.
