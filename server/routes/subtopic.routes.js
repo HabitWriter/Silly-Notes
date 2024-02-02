@@ -13,9 +13,18 @@ subtopicRouter.post('/new', async (req, res) => {
 
     const topic = await Topic.findOne({ where: {topicId : topicId}});
 
-    const subtopic = await Subtopic.create({ title : title}) 
+    let subtopic = await Subtopic.create({ title : title}) 
     await topic.addSubtopic(subtopic)
     subtopic.topicId = topic.topicId
+
+    // Fetch the newly created subtopic with its urls
+    subtopic = await Subtopic.findOne({
+        where: { subtopicId: subtopic.subtopicId },
+        include: [{
+            model: Url,
+            as: 'urls'
+        }]
+    });
 
 
     console.log(subtopic);

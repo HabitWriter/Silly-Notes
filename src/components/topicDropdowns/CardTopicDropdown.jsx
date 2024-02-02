@@ -1,21 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddButton from "../buttons/AddButton";
 import { useAtom, useAtomValue } from "jotai";
-import { subtopicArrayWriteableAtom, topicArrayWriteableAtom, subtopicFilteredWriteableAtom, topicFilterAtom } from "../../atom"
+import {
+    subtopicArrayWriteableAtom,
+    topicArrayWriteableAtom,
+    subtopicFilteredWriteableAtom,
+    topicFilterAtom,
+} from "../../atom";
 import TopicOptionsButton from "../buttons/TopicOptionsButton";
 import axios from "axios";
 import { debounce } from "lodash";
 import DeleteButton from "../buttons/DeleteButton";
 
-export default function CardTopicDropdown({topicId, subtopicChange}) {
-    
+export default function CardTopicDropdown({ topicId, subtopicChange }) {
     const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
     const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
     const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
 
     // const topicArray = useAtomValue(topicArrayAtom);
     const topicFilter = useAtomValue(topicFilterAtom);
-    
+
     // Logic to get the topic from the parent component handing down the data.
     const getTopicTitleInitial = (topicId) => {
         const chosenTopic = topicArray.find(
@@ -27,29 +31,61 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
     const [selected, setSelected] = useState(getTopicTitleInitial(topicId));
     const [isAddingTopic, setIsAddingTopic] = useState(false);
     const [isEditingTopic, setIsEditingTopic] = useState(false);
+    const [selectedValue, setSelectedValue] = useState(topicId);
 
     const getTopicTitle = (e) => {
-        const chosenTopic = topicArray.find(
-            (topic) => topic.topicId == e.target.value
-        );
-        return chosenTopic.title;
-    };
+        let topicId;
+        try {
+            // Try to get topicId from e.target.value
+            topicId = e.target.value;
+        } catch (error) {
+            // If that fails, use e directly as topicId
+            topicId = e;
+        }
     
+        const chosenTopic = topicArray.find(
+            (topic) => topic.topicId == topicId
+        );
+    
+        return chosenTopic ? chosenTopic.title : '';
+    };
+
     const setFilteredArray = async (changedSubtopicPromise) => {
         // Wait for the promise to resolve
         const changedSubtopic = await changedSubtopicPromise;
-    
-        let newFullArray = subtopicArray.filter(subtopic => subtopic.subtopicId !== changedSubtopic.data.subtopicId);
-        newFullArray.push(changedSubtopic.data)
-        newFullArray = newFullArray.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed))
+
+        let newFullArray = subtopicArray.filter(
+            (subtopic) =>
+                subtopic.subtopicId !== changedSubtopic.data.subtopicId
+        );
+        newFullArray.push(changedSubtopic.data);
+        newFullArray = newFullArray.sort(
+            (a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed)
+        );
         console.log(newFullArray);
         setSubtopicArray(newFullArray);
-    
-        
-        const newFilteredArray = subtopicFiltered.filter(subtopic => subtopic.subtopicId !== changedSubtopic.data.subtopicId);
-        
+
+        const newFilteredArray = subtopicFiltered.filter(
+            (subtopic) =>
+                subtopic.subtopicId !== changedSubtopic.data.subtopicId
+        );
+
         setSubtopicFiltered(newFilteredArray);
-    }
+    };
+
+    const handleValueChange = (value) => {
+        console.log(value);
+        setSelected(getTopicTitle(value));
+        let changedSubtopic = subtopicChange(parseInt(value), "topicId");
+        if (topicFilter !== 0) {
+            setFilteredArray(changedSubtopic);
+        }
+    };
+
+    useEffect(() => {
+        // Call the new function with selectedValue as argument
+        handleValueChange(selectedValue);
+    }, [selectedValue]);
 
     const newTopicHandler = async (e) => {
         if (e.target.value) {
@@ -60,6 +96,7 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
             const newTopicArray = [...topicArray];
             newTopicArray.push(topic.data);
             setTopicArray(newTopicArray);
+            setSelectedValue(parseInt(topic.data.topicId))
         }
     };
 
@@ -70,17 +107,24 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
                 title: e.target.value,
             });
             const newTopicArray = [...topicArray];
-            const topicIndex = newTopicArray.findIndex((searchedTopic) => searchedTopic.topicId === parseInt(passedTopicId) )
-            newTopicArray[topicIndex].title = e.target.value
+            const topicIndex = newTopicArray.findIndex(
+                (searchedTopic) =>
+                    searchedTopic.topicId === parseInt(passedTopicId)
+            );
+            newTopicArray[topicIndex].title = e.target.value;
             setTopicArray(newTopicArray);
+            if (topicId === passedTopicId)
+            setSelected(e.target.value)
         }
     };
 
     const deleteTopicHandler = async (topicId) => {
-      await axios.delete(`/api/topic/delete/${topicId}`)
-      const newTopicArray = topicArray.filter((searchedTopic) => searchedTopic.topicId !== parseInt(topicId));
-      setTopicArray(newTopicArray);
-    }
+        await axios.delete(`/api/topic/delete/${topicId}`);
+        const newTopicArray = topicArray.filter(
+            (searchedTopic) => searchedTopic.topicId !== parseInt(topicId)
+        );
+        setTopicArray(newTopicArray);
+    };
 
     return (
         <div className="dropdown dropdown-end">
@@ -94,13 +138,12 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
                 <div className="card-body flex items-center">
                     {isEditingTopic ? (
                         // Show this when isEditingTopic is true
-                        topicArray.map(function (topic) { 
-                          return (
+                        topicArray.map(function (topic) {
+                            return (
                                 <div key={topic.topicId} className="flex">
                                     <input
                                         type="text"
                                         autoFocus
-                                        
                                         defaultValue={topic.title}
                                         name="new Topic"
                                         placeholder="New Topic title"
@@ -114,34 +157,37 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
                                             }
                                         }}
                                     />
-                                    <DeleteButton clickAction={() => deleteTopicHandler(topic.topicId)}/>
+                                    <DeleteButton
+                                        clickAction={() =>
+                                            deleteTopicHandler(topic.topicId)
+                                        }
+                                    />
                                 </div>
                             );
                         })
                     ) : (
                         // Show this when isEditingTopic is false
                         <select
-                        className="select select-ghost w-full max-w-xs"
-                        defaultValue={topicId}
-                        onChange={(e) => {
-                            setSelected(getTopicTitle(e));
-                            let changedSubtopic = subtopicChange(e,"topicId")
-                            if (topicFilter !== 0) {
-                            setFilteredArray(changedSubtopic)
-                            }
-                        }}
-                    >
-                        {topicArray.map(function (topic) {
-                            return (
-                                <option
-                                    key={topic.topicId}
-                                    value={topic.topicId}
-                                >
-                                    {topic.title}
-                                </option>
-                            );
-                        })}
-                    </select>
+                            className="select select-ghost w-full max-w-xs"
+                            value={selectedValue} // Set the value prop to the state variable
+                            onChange={(e) => {
+                                console.log(selectedValue);
+                                setSelectedValue(e.target.value); // Update the state variable when the value changes
+                                setSelected(getTopicTitle(e));
+
+                            }}
+                        >
+                            {topicArray.map(function (topic) {
+                                return (
+                                    <option
+                                        key={topic.topicId}
+                                        value={topic.topicId}
+                                    >
+                                        {topic.title}
+                                    </option>
+                                );
+                            })}
+                        </select>
                     )}
 
                     {/* Add a New Topic input */}
@@ -183,8 +229,6 @@ export default function CardTopicDropdown({topicId, subtopicChange}) {
                         />
                     </div>
                 </div>
-                
-                
             </div>
         </div>
     );

@@ -34,8 +34,16 @@ export default function SubtopicCard({ subtopic }) {
         urlField = null,
         urlId = null
     ) {
-        let passedValue = e.target.value;
+        let passedValue;
+    // If e is a number, set passedValue to e
+    if (typeof e === 'number') {
+        console.log("received a number");
+        passedValue = e;
+    } else {
+        passedValue = e.target.value;
         if (changedField === "topicId") passedValue = parseInt(passedValue);
+    }
+
 
         // Find the index of the current subtopic in the array
         const subtopicIndex = subtopicArray.findIndex(
@@ -138,7 +146,6 @@ export default function SubtopicCard({ subtopic }) {
     }
 
     async function deleteHandler() {
-        console.log("Delete Handler called");
 
         if (confirm(`Are you sure you want to delete ${subtopic.title}`)) {
             // Filter out the subtopic with the matching subtopicId from both atoms

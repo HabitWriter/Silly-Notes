@@ -57,7 +57,7 @@ export default function AddSubtopicCard({ subtopicArray }) {
                                     inputRef.current.value,
                                     newNoteTopic
                                 );
-
+                                console.log(createdSubtopic.data);
                                 setIsAddingNote(false);
                                 setSubtopicArray([
                                     createdSubtopic.data,

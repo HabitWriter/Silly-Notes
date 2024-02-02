@@ -21,11 +21,8 @@ export default function AddTopicDropdown() {
         initialTopic = parseInt(filteredTopic);
         initialColor = "btn";
     }
-    const [buttonColor, setButtonColor] = useState(initialColor);
-    // const topicArray = useAtomValue(topicArrayAtom);
-    const setNewNoteTopic = useSetAtom(newNoteTopicAtom);
-    const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
 
+    // Selected function
     const getTopicTitleInitial = (topicId) => {
         if (parseInt(filteredTopic) !== 0) {
             const chosenTopic = topicArray.find(
@@ -41,6 +38,9 @@ export default function AddTopicDropdown() {
     const [selected, setSelected] = useState(
         getTopicTitleInitial(initialTopic)
     );
+    const [buttonColor, setButtonColor] = useState(initialColor);
+    const setNewNoteTopic = useSetAtom(newNoteTopicAtom);
+    const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
     const [isAddingTopic, setIsAddingTopic] = useState(false);
     const [isEditingTopic, setIsEditingTopic] = useState(false);
 
@@ -60,6 +60,9 @@ export default function AddTopicDropdown() {
             const newTopicArray = [...topicArray];
             newTopicArray.push(topic.data);
             setTopicArray(newTopicArray);
+            setSelected(topic.data.title);
+            setNewNoteTopic(parseInt(topic.data.topicId))
+            setButtonColor("btn");
         }
     };
 
@@ -129,28 +132,28 @@ export default function AddTopicDropdown() {
                     ) : (
                         // Show this when isEditingTopic is false
                         <select
-                        className="select select-ghost w-full max-w-xs"
-                        defaultValue={parseInt(filteredTopic)}
-                        onChange={(e) => {
-                            setSelected(getTopicTitle(e));
-                            setButtonColor("btn");
-                            setNewNoteTopic(e.target.value);
-                        }}
-                    >
-                        <option value="0" disabled>
-                            Choose Topic...
-                        </option>
-                        {topicArray.map(function (topic) {
-                            return (
-                                <option
-                                    key={topic.topicId}
-                                    value={topic.topicId}
-                                >
-                                    {topic.title}
-                                </option>
-                            );
-                        })}
-                    </select>
+                            className="select select-ghost w-full max-w-xs"
+                            defaultValue={parseInt(filteredTopic)}
+                            onChange={(e) => {
+                                setSelected(getTopicTitle(e));
+                                setButtonColor("btn");
+                                setNewNoteTopic(e.target.value);
+                            }}
+                        >
+                            <option value="0" disabled>
+                                Choose Topic...
+                            </option>
+                            {topicArray.map(function (topic) {
+                                return (
+                                    <option
+                                        key={topic.topicId}
+                                        value={topic.topicId}
+                                    >
+                                        {topic.title}
+                                    </option>
+                                );
+                            })}
+                        </select>
                     )}
 
                     {/* Add a New Topic input */}
@@ -191,39 +194,6 @@ export default function AddTopicDropdown() {
                             }}
                         />
                     </div>
-                </div>
-
-                <div className="card-body flex items-center">
-                    {/* The Select Box */}
-                    <select
-                        className="select select-ghost w-full max-w-xs"
-                        defaultValue={parseInt(filteredTopic)}
-                        onChange={(e) => {
-                            setSelected(getTopicTitle(e));
-                            setButtonColor("btn");
-                            setNewNoteTopic(e.target.value);
-                        }}
-                    >
-                        <option value="0" disabled>
-                            Choose Topic...
-                        </option>
-                        {topicArray.map(function (topic) {
-                            return (
-                                <option
-                                    key={topic.topicId}
-                                    value={topic.topicId}
-                                >
-                                    {topic.title}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <AddButton
-                        clickAction={() => {
-                            return;
-                        }}
-                        title={"New Topic"}
-                    />
                 </div>
             </div>
         </div>
