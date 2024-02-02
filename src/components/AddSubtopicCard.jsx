@@ -70,9 +70,10 @@ export default function AddSubtopicCard({  }) {
                                     createdSubtopic.data,
                                     ...subtopicArray,
                                 ]);
-                                
-                                if (createdSubtopic.data.topicId == topicFilter) {
+                                console.log(createdSubtopic.data);
+                                if (createdSubtopic.data.topicId == topicFilter || topicFilter == 0) {
                                 setSubtopicFiltered([
+                                    
                                     createdSubtopic.data,
                                     ...subtopicFiltered,
                                 ])};

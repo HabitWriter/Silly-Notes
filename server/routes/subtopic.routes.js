@@ -34,7 +34,10 @@ subtopicRouter.post('/new', async (req, res) => {
 subtopicRouter.post('/edit', async (req, res) => {
   const {subtopicId, changedField, change} = req.body;
 
-  const subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId}})
+  const subtopic = await Subtopic.findOne({ where: {subtopicId : subtopicId},include: [{
+    model: Url,
+    as: 'urls'
+}]})
   subtopic[changedField] = change
   console.log(changedField);
   console.log(change);

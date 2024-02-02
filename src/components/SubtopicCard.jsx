@@ -260,6 +260,7 @@ export default function SubtopicCard({ subtopic }) {
                         {/* Links Section */}
                         <h3>Links</h3>
 
+                        {/* {console.trace(subtopic)} */}
                         {subtopic.urls.map(({ urlId, url, text }) => {
                             return (
                                 <div

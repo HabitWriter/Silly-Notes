@@ -33,6 +33,7 @@ export const subtopicFilteredWriteableAtom = atom(
   (get, set, newValue) => {
     const nextValue =
       typeof newValue === 'function' ? newValue(get(subtopicArrayWriteableAtom)) : newValue
+      console.log(nextValue);
     set(overwrittenSubtopicFilteredAtom, nextValue)
   },
 )

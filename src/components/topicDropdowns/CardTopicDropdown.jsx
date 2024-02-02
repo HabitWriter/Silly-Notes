@@ -13,8 +13,12 @@ import { debounce } from "lodash";
 import DeleteButton from "../buttons/DeleteButton";
 
 export default function CardTopicDropdown({ topicId, subtopicChange }) {
-    const [subtopicArray, setSubtopicArray] = useAtom(subtopicArrayWriteableAtom);
-    const [subtopicFiltered, setSubtopicFiltered] = useAtom(subtopicFilteredWriteableAtom);
+    const [subtopicArray, setSubtopicArray] = useAtom(
+        subtopicArrayWriteableAtom
+    );
+    const [subtopicFiltered, setSubtopicFiltered] = useAtom(
+        subtopicFilteredWriteableAtom
+    );
     const [topicArray, setTopicArray] = useAtom(topicArrayWriteableAtom);
 
     // const topicArray = useAtomValue(topicArrayAtom);
@@ -31,7 +35,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
     const [selected, setSelected] = useState(getTopicTitleInitial(topicId));
     const [isAddingTopic, setIsAddingTopic] = useState(false);
     const [isEditingTopic, setIsEditingTopic] = useState(false);
-    const [selectedValue, setSelectedValue] = useState(topicId);
+    const [selectedTopicValue, setSelectedTopicValue] = useState(topicId);
 
     const getTopicTitle = (e) => {
         let topicId;
@@ -42,12 +46,12 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
             // If that fails, use e directly as topicId
             topicId = e;
         }
-    
+
         const chosenTopic = topicArray.find(
             (topic) => topic.topicId == topicId
         );
-    
-        return chosenTopic ? chosenTopic.title : '';
+
+        return chosenTopic ? chosenTopic.title : "";
     };
 
     const setFilteredArray = async (changedSubtopicPromise) => {
@@ -72,21 +76,26 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
 
         setSubtopicFiltered(newFilteredArray);
     };
-
-    const handleValueChange = async (value) => {
+    
+    const handleTopicChange = async (value) => {
         
-        setSelected(getTopicTitle(value));
-        let changedSubtopic = await subtopicChange(parseInt(value), "topicId");
-        if (topicFilter !== 0) {
-            setFilteredArray(changedSubtopic);
-        }
+            setSelected(getTopicTitle(value));
+            let changedSubtopic = await subtopicChange(
+                parseInt(value),
+                "topicId"
+            );
+            if (topicFilter !== 0) {
+                setFilteredArray(changedSubtopic);
+            }
+        
     };
 
     useEffect(() => {
-        // Call the new function with selectedValue as argument
-        
-        handleValueChange(selectedValue);
-    }, [selectedValue]);
+        // Call the new function with selectedTopicValue as argument
+        if (topicId !== selectedTopicValue) {
+            console.log("hit");
+        handleTopicChange(selectedTopicValue)};
+    }, [selectedTopicValue]);
 
     const newTopicHandler = async (e) => {
         if (e.target.value) {
@@ -97,7 +106,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
             const newTopicArray = [...topicArray];
             newTopicArray.push(topic.data);
             setTopicArray(newTopicArray);
-            setSelectedValue(parseInt(topic.data.topicId))
+            setSelectedTopicValue(parseInt(topic.data.topicId));
         }
     };
 
@@ -114,8 +123,7 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
             );
             newTopicArray[topicIndex].title = e.target.value;
             setTopicArray(newTopicArray);
-            if (topicId === passedTopicId)
-            setSelected(e.target.value)
+            if (topicId === passedTopicId) setSelected(e.target.value);
         }
     };
 
@@ -170,12 +178,11 @@ export default function CardTopicDropdown({ topicId, subtopicChange }) {
                         // Show this when isEditingTopic is false
                         <select
                             className="select select-ghost w-full max-w-xs"
-                            value={selectedValue} // Set the value prop to the state variable
+                            value={selectedTopicValue} // Set the value prop to the state variable
                             onChange={(e) => {
-                                console.log(selectedValue);
-                                setSelectedValue(e.target.value); // Update the state variable when the value changes
+                                console.log(selectedTopicValue);
+                                setSelectedTopicValue(e.target.value); // Update the state variable when the value changes
                                 setSelected(getTopicTitle(e));
-
                             }}
                         >
                             {topicArray.map(function (topic) {
